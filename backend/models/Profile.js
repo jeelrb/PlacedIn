@@ -23,6 +23,7 @@ const userProfile = new Schema({
         githubUserName: String,
         githubRepo: [],
     },
+    company: String,
     linkedIn: String,
     instagram: String,
     facebook: String,
@@ -31,4 +32,5 @@ const userProfile = new Schema({
     timestamps:true
 });
 
-module.exports = Profile = mongoose.model('Profile',userProfile);
+const Profile = mongoose.model('Profile',userProfile);
+module.exports = Profile
