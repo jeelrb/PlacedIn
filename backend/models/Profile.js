@@ -27,7 +27,12 @@ const userProfile = new Schema({
     linkedIn: String,
     instagram: String,
     facebook: String,
-    twitter: String
+    twitter: String,
+    education:{
+        college: String,
+        branch: String,
+        Batch: Number,
+    }
 },{
     timestamps:true
 });
