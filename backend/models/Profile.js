@@ -24,6 +24,9 @@ const userProfile = new Schema({
         githubRepo: [],
     },
     linkedIn: String,
+    instagram: String,
+    facebook: String,
+    twitter: String
 },{
     timestamps:true
 });
