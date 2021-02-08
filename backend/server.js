@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 //Routes setup
-const doubtRouter = require('./routes/doubt.route');
+const postRouter = require('./routes/doubt.route');
 const interviewExpRouter = require('./routes/interview-experience.route');
 const profileRouter = require('./routes/profile.route');
 const registrationRouter = require('./routes/register')
@@ -19,7 +19,8 @@ const loginRouter = require('./routes/login')
 
 app.use('/register',registrationRouter)
 app.use('/profile',profileRouter);
-app.use('/doubt',doubtRouter);
+app.use('/post',postRouter);
+app.use('/interview',interviewExpRouter);
 app.use('/',loginRouter);
 
 const port = 5000 || process.env.PORT;
