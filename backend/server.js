@@ -1,28 +1,28 @@
-const express=require('express');
-const cors=require('cors');
-const mongoose=require('mongoose');
+const express = require('express');
+const cors = require('cors');
+const connectDB = require('../config/db')
 
-const app=express();
-const port=5000;
+const app = express();
+
+// Connect with mongo database
+connectDB()
 
 app.use(cors());
 app.use(express.json());
 
-// const uri=process.env.ATLAS_URI;
-//mongoose.connect(uri, {useNewUrlParser:true,useCreateIndex:true});
+//Routes setup
+const doubtRouter = require('./routes/doubt.route');
+const interviewExpRouter = require('./routes/interview-experience.route');
+const profileRouter = require('./routes/profile.route');
+const registrationRouter = require('./routes/register')
+const loginRouter = require('./routes/login')
 
-//const connection= mongoose.connection;
-//connection.once('open',()=>{
-//    console.log("MongoDB database connection established Successfully");
-//});
-
-const doubtRouter= require('./routes/doubt.route');
-const interviewExpRouter=require('./routes/interview-experience.route');
-const profileRouter=require('./routes/profile.route');
-
+app.use('/register',registrationRouter)
 app.use('/profile',profileRouter);
 app.use('/doubt',doubtRouter);
-app.use('/interview-experience',interviewExpRouter);
+app.use('/',loginRouter);
+
+const port = 5000 || process.env.PORT;
 
 app.listen(port, ()=>{
     console.log(`server is running on port: ${port}`);
