@@ -11,6 +11,13 @@ router.get('/',auth,(req,res)=>{
     .catch(err => res.status(400).json('Error : '+err));
 });
 
+//to show the users post
+router.get('/my',auth,(req,res)=>{
+    Post.find({userId:req.user.id})
+    .then(posts => res.json(posts))
+    .catch(err => res.status(400).json('Error : '+err));
+});
+
 //to add the new post by the user
 router.post('/add',[
     auth,
@@ -41,7 +48,7 @@ async (req,res)=>{
 });
 
 //To update particular post of the user
-router.post('/update/:id',[
+router.post('/my/:id',[
     auth,
     check('text', 'Text is required').not().isEmpty(),
     check('title', 'Title is required').not().isEmpty(),
@@ -59,23 +66,37 @@ async (req,res)=>{
     
     const {text,title} = req.body;
 
-    Post.findById(req.params.id)
-    .then(post =>{
-        post.text=text;
-        post.title=title;
+    const updatePost=Post.find({_id:req.params.id,userId:req.user.id});
+    if(updatePost)
+    {
+        Post.findById(req.params.id)
+        .then(post =>{
+            post.text=text;
+            post.title=title;
 
-        post.save()
-        .then(()=>res.json('Post Updated'));
-    });
+            post.save()
+            .then(()=>res.json('Post Updated'));
+        });
+    }
+    else{
+        res.staus(400).json('You are not authoried to update this post.');
+    }
 });
 
 //to delete a post by the user
-router.delete('/delete/:id',[
+router.delete('/my/:id',[
     auth,
 ],
 (req,res)=>{
-    Post.findByIdAndDelete(req.params.id)
-    .then(()=>res.json('Post Deleted'));
+    const deletePost=Post.find({_id:req.body.id,userId:req.user.id});
+    if(deletePost)
+    {
+        Post.findByIdAndDelete(req.params.id)
+        .then(()=>res.json('Post Deleted'));
+    }
+    else{
+        res.json('You are not Authoried to Delete this Post:)');
+    }
 });
 
 module.exports = router;
