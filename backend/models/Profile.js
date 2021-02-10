@@ -11,23 +11,23 @@ const userProfile = new Schema({
         type: [ String ],
         required: true
     },
-    portfolio: String,
-    codeforcesProfile:{
+    codeforcesProfile: {
         cfUserName: String,
         cfRating: Number,
         cfMaxRating: Number,
         cfRank: String,
     },
-    codechefProfile:{
+    codechefProfile: {
         ccUserName: String,
         ccRating: Number,
         ccMaxRating: Number,
         ccRank: String,
     },
-    github:{
+    github: {
         githubUserName: String,
         githubRepo: [],
     },
+    portfolio: String,
     company: String,
     linkedIn: String,
     instagram: String,
@@ -53,11 +53,9 @@ const userProfile = new Schema({
             },
             from: {
                 type: String,
-                required: true
             },
             to: {
                 type: String,
-                required: true
             }
         }
     ]

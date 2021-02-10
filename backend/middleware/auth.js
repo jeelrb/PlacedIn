@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
 
     const token = req.header('auth-token')
     if(!token) {
-        return res.status(401).json({ error: 'No token, authorization denied' })
+        return res.status(401).json({ error: 'User not authorized' })
     }
 
     try {
