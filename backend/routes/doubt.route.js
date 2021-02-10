@@ -5,18 +5,26 @@ const User=require('../models/User');
 const { check, validationResult } = require('express-validator');
 
 //to show all the posts
-router.get('/',auth,(req,res)=>{
-    Post.find()
-    .then(posts => res.json(posts))
-    .catch(err => res.status(400).json('Error : '+err));
+router.get('/', auth, async (req, res) => {
+
+    try{
+        const posts = await Post.find()
+        res.json(posts)
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).send('Server Error')
+    }
+
 });
 
 //to show the users post
-router.get('/my',auth,(req,res)=>{
+router.get('/me', auth, async (req, res) => {
+
     Post.find({userId:req.user.id})
     .then(posts => res.json(posts))
     .catch(err => res.status(400).json('Error : '+err));
-});
+
+})
 
 //to add the new post by the user
 router.post('/add',[

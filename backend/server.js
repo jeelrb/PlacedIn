@@ -13,7 +13,7 @@ app.use(express.json());
 //Routes setup
 const postRouter = require('./routes/doubt.route');
 const interviewExpRouter = require('./routes/interview-experience.route');
-const profileRouter = require('./routes/profile.route');
+const profileRouter = require('./routes/profile');
 const registrationRouter = require('./routes/register')
 const loginRouter = require('./routes/login')
 

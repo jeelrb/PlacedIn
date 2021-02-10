@@ -7,6 +7,11 @@ const userProfile = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    skills: {
+        type: [ String ],
+        required: true
+    },
+    portfolio: String,
     codeforcesProfile:{
         cfUserName: String,
         cfRating: Number,
@@ -28,11 +33,34 @@ const userProfile = new Schema({
     instagram: String,
     facebook: String,
     twitter: String,
-    education:{
-        college: String,
-        branch: String,
-        Batch: Number,
-    }
+    education:[
+        {
+            college: {
+                type: String,
+                required: true
+            },
+            degree: {
+                type: String,
+                required: true
+            },
+            branch: {
+                type: String,
+                required: true
+            },
+            batch: {
+                type: String,
+                required: true
+            },
+            from: {
+                type: String,
+                required: true
+            },
+            to: {
+                type: String,
+                required: true
+            }
+        }
+    ]
 },{
     timestamps:true
 });
