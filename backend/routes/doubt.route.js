@@ -2,7 +2,7 @@ const router=require('express').Router();
 const auth=require('../middleware/auth');
 const Post=require('../models/Post');
 const User=require('../models/User');
-const { check, validationResult } = require('express-validator')
+const { check, validationResult } = require('express-validator');
 
 //to show all the posts
 router.get('/',auth,(req,res)=>{

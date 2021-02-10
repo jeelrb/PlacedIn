@@ -5,7 +5,7 @@ const ExperienceSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    experience: [
+    experience:
         {
             company: {
                 type: String,
@@ -18,7 +18,6 @@ const ExperienceSchema = mongoose.Schema({
             questions: [],
             text: String
         }
-    ]
 })
 
 const Experience = mongoose.model('Experience', ExperienceSchema)
