@@ -1,38 +1,177 @@
-.App {
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  background: #c1bdba;
+  font-family: 'Titillium Web', sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: #1ab188;
+  transition: 0.5s ease;
+}
+
+a:hover {
+  color: darken(#1f9e7c, 5%);
+}
+
+.form {
+  background: #182c3b;
+  padding: 40px;
+  position: relative;
+  max-width: 600px;
+  margin: 40px auto;
+  border-radius: 4px;
+  box-shadow: 10px 15px 25px rgba(0, 0, 0, 1);
+}
+
+.tab-group {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 40px 0;
+}
+
+.tab-group li a {
+  display: block;
+  text-decoration: none;
+  padding: 15px;
+  background: #30776f;
+  color: #a0b3b0;
+  font-size: 20px;
+  float: left;
+  width: 50%;
   text-align: center;
+  cursor: pointer;
+  transition: 0.5s ease;
 }
 
-.App-logo {
-  height: 40vmin;
+.tab-group li a:hover {
+  background: #1f9e7c;
+  color: #ffffff;
+}
+
+.tab-group .active a {
+  background: #1ab188;
+  color: #ffffff;
+}
+
+.tab-group:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.tab-content {
+  background-size: cover;
+  padding: 40px;
+  border-radius: 0;
+}
+
+h1 {
+  margin: 0 0 30px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  padding: 0;
+  text-align: center;
+  color: #ffffff;
+  font-weight: 300;
+  margin: 0 0 40px;
+}
+
+.tab-content .field-wrap {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.tab-content .field-wrap input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 20px;
+  margin-bottom: 30px;
+  outline: none;
+  background-color: transparent;
+  color: #ffffff;
+  border: none;
+  border-bottom: 1px solid #1ab188;
+  outline: none;
+  background-color: transparent;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.tab-content .field-wrap label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
   pointer-events: none;
+  transition: 0.5s;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.tab-content .field-wrap input:focus ~ label {
+  top: -20px;
+  color: #1ab188;
+  font-size: 14px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.tab-content .field-wrap label .req {
+  margin: 2px;
+  color: #1ab188;
 }
 
-.App-link {
-  color: #61dafb;
+.tab-content .top-row > div {
+  float: left;
+  width: 48%;
+  margin-right: 4%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.tab-content .top-row > div:last-child {
+  margin: 0;
+}
+
+.tab-content .top-row:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.tab-content .button {
+  border: 0;
+  outline: none;
+  border-radius: 0;
+  padding: 15px 0;
+  font-size: 2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: #1f9e7c;
+  color: #ffffff;
+  transition: all.5s ease;
+  -webkit-appearance: none;
+}
+
+.tab-content .button:hover,
+.tab-content .button:focus {
+  background: #1ab188;
+  box-shadow: 0 0 5px #1ab188, 0 0 25px #1ab188, 0 0 50px #1ab188,
+    0 0 100px #1ab188;
+}
+
+.tab-content .button-block {
+  display: block;
+  width: 100%;
+}
+
+.tab-content .forgot {
+  margin-top: -20px;
+  text-align: right;
 }
