@@ -1,5 +1,8 @@
+import React, { useEffect, useState, useReducer } from 'react'
+import axios from 'axios'
 
 function Login() {
+
     return (
     <div class="form">
         <ul class="tab-group">
@@ -12,13 +15,13 @@ function Login() {
                 <h1>Welcome Back!</h1>
                 <form action="/" method="post">
                     <div class="field-wrap">
-                        <input type="email"required autocomplete="off"/>
+                        <input type="email"  required autocomplete="off"/>
                         <label>
                             Email<span class="req">*</span>
                         </label>
                     </div>
                     <div class="field-wrap">
-                        <input type="password"required autocomplete="off"/>
+                        <input type="password"  required autocomplete="off"/>
                         <label>
                             Password<span class="req">*</span>
                         </label>

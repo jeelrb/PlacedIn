@@ -7,7 +7,10 @@ const app = express();
 // Connect with mongo database
 connectDB()
 
-app.use(cors());
+const port = 5000 || process.env.PORT;
+
+app.use(cors())
+
 app.use(express.json());
 
 //Routes setup
@@ -22,8 +25,6 @@ app.use('/profile',profileRouter);
 app.use('/post',postRouter);
 app.use('/interview',interviewExpRouter);
 app.use('/',loginRouter);
-
-const port = 5000 || process.env.PORT;
 
 app.listen(port, ()=>{
     console.log(`server is running on port: ${port}`);
