@@ -17,7 +17,7 @@ router.post('/', [
 
     const errors = validationResult(req)
     if(!errors.isEmpty()) {
-        return res.status(400).json({ error: errors.array() })
+        return res.status(400).json({ errors: errors.array() })
     }  
 
     const { username, password } = req.body
@@ -25,12 +25,12 @@ router.post('/', [
     try {
         let user = await User.findOne({ username })
         if(!user) {
-            return res.status(400).json({ error: 'Invalid credentials' })
+            return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] })
         }
 
         const isMatch = await bcrypt.compare(password, user.password)
         if(!isMatch) {
-            return res.status(400).json({ error: 'Invalid credentials' })
+            return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] })
         }
 
         const payload = {
