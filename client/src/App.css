@@ -75,7 +75,7 @@ a:hover {
   border-radius: 0;
 }
 
-h1 {
+.tab-content h1 {
   margin: 0 0 30px;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -103,7 +103,6 @@ h1 {
   border-bottom: 1px solid #1ab188;
   outline: none;
   background-color: transparent;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .tab-content .field-wrap label {
@@ -117,7 +116,8 @@ h1 {
   transition: 0.5s;
 }
 
-.tab-content .field-wrap input:focus ~ label {
+.tab-content .field-wrap input:focus ~ label,
+.tab-content .field-wrap input:valid ~ label {
   top: -20px;
   color: #1ab188;
   font-size: 14px;
