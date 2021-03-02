@@ -46,42 +46,42 @@ function Login() {
     }
 
     return (
-        <div class="form">
-            <ul class="tab-group">
-                <li class="tab active"><a href="/">Log In</a></li>
-                <li class="tab"><a href="/signup">Sign Up</a></li>
+        <div className="form">
+            <ul className="tab-group">
+                <li className="tab active"><a href="/">Log In</a></li>
+                <li className="tab"><a href="/signup">Sign Up</a></li>
             </ul>
             { errors.length!==0 && errors.map((error) => <DisplayError error={error.msg}/>) }
-            <div class="tab-content">
+            <div className="tab-content">
                 <div id="login">   
                     <h1>Welcome Back!</h1>
                     <form onSubmit={(e) => onSubmit(e)}>
-                        <div class="field-wrap">
+                        <div className="field-wrap">
                             <input 
                                 type="text"  
                                 value={username}
                                 onChange={(e) => setData({ ...data, username: e.target.value })}
                                 required 
-                                autocomplete="off"                               
+                                autoComplete="off"                               
                             />
                             <label>
-                                Username<span class="req">*</span>
+                                Username<span className="req">*</span>
                             </label>
                         </div>
-                        <div class="field-wrap">
+                        <div className="field-wrap">
                             <input 
                                 type="password"  
                                 value={password}
                                 onChange={(e) => setData({ ...data, password: e.target.value })}
                                 required 
-                                autocomplete="off"                              
+                                autoComplete="off"                              
                             />
                             <label>
-                                Password<span class="req">*</span>
+                                Password<span className="req">*</span>
                             </label>
                         </div>
-                        <p class="forgot"><a href="#">Forgot Password?</a></p>
-                        <button type="submit" class="button button-block">Log In</button>                
+                        <p className="forgot"><a href="#">Forgot Password?</a></p>
+                        <button type="submit" className="button button-block">Log In</button>                
                     </form>
                 </div>
             </div>
