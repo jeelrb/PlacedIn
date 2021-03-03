@@ -4,7 +4,7 @@ import Login from './components/login';
 import Signup from './components/signup';
 import Dashboard from './components/Dashboard'
 import {BrowserRouter as Router , Route} from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css'
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (

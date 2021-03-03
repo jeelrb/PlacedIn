@@ -2,21 +2,24 @@ import React from 'react'
 
 function Dashboard() {
     return (
-        <div className="container-fluid">
+        <div>
+          <div className="fixed-top">
             <nav className="navbar navbar-expand-lg bg-dark sticky-top">
-        <a className="navbar-brand" href="#">PlacedIn</a>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mr-auto">
-                <li className="nav-item active">
+              <a className="navbar-brand" href="#">PlacedIn</a>
+              <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul className="navbar-nav mr-auto">
+                  <li className="nav-item active">
                     <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
-                </li>
-                <li className="nav-item">
+                  </li>
+                  <li className="nav-item">
                     <a className="nav-link" href="#">Link</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <div className="container-fluid">
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          </div>
+
+        <div>
         <div className="row">
             <nav id="sidebarMenu" className="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
                 <div className="sticky-top pt-5">
@@ -93,7 +96,7 @@ function Dashboard() {
                   </ul>
                 </div>
               </nav>
-              <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4"><div className="chartjs-size-monitor"><div className="chartjs-size-monitor-expand"><div className=""></div></div><div className="chartjs-size-monitor-shrink"><div className=""></div></div></div>
+              <main className="mt-5 col-md-9 ms-sm-auto col-lg-10 px-md-4"><div className="chartjs-size-monitor"><div className="chartjs-size-monitor-expand"><div className=""></div></div><div className="chartjs-size-monitor-shrink"><div className=""></div></div></div>
                 <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                   <h1 className="h2">Dashboard</h1>
                   <div className="btn-toolbar mb-2 mb-md-0">
@@ -241,7 +244,7 @@ function Dashboard() {
               </main>
         </div>
     </div>
-        </div>
+  </div>
     )
 }
 
