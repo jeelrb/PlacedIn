@@ -175,3 +175,56 @@ a:hover {
   margin-top: -20px;
   text-align: right;
 }
+
+.dashboard_container {
+  background-color: #f5f5f5 
+}
+
+.sidebarLink {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.sidebarLink > h6 {
+  font-weight: 600;
+}
+
+.sidebarLink:hover > h6 {
+  color: white
+}
+
+.sidebarLink:hover {
+  border-radius: 10px;
+  background-color: #64b5f6
+}
+
+.dashboard_container{
+  padding-top: 20px;
+  min-height: 1000px;
+  overflow: hidden;
+}
+.post_container {
+  background-color: white;
+  padding: 50px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  min-height: 800px;
+  overflow: hidden;
+}
+
+.post_button{
+  border-radius: 40px !important;
+}
+
+.post_buttons{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile_container{
+  background-color: white;
+  padding: 50px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  min-height: 500px;
+  overflow: hidden;
+}
