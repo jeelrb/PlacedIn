@@ -213,12 +213,7 @@ a:hover {
 
 .post_button{
   border-radius: 40px !important;
-}
-
-.post_buttons{
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width:100%;
 }
 
 .profile_container{
