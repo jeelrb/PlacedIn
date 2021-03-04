@@ -28,7 +28,7 @@ function App() {
     <Router>
         <Switch>
           <Route path="/" exact render={() => <Login onAuthenticated={onAuthenticated}/>}></Route>
-          <Route path="/Signup" exact render={() => <Signup onAuthenticated={onAuthenticated}/>}></Route>
+          <Route path="/signup" exact render={() => <Signup onAuthenticated={onAuthenticated}/>}></Route>
           <PrivateRoute path="/dashboard" exact component={Dashboard}></PrivateRoute>
         </Switch>
     </Router>
