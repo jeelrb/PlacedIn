@@ -3,6 +3,7 @@ import './App.css';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Dashboard from './components/Dashboard'
+import AddProfile from './components/AddProfile'
 import PrivateRoute from './components/routing/PrivateRoute'
 import {BrowserRouter as Router , Route, Switch} from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css'; 
@@ -30,6 +31,7 @@ function App() {
           <Route path="/" exact render={() => <Login onAuthenticated={onAuthenticated}/>}></Route>
           <Route path="/signup" exact render={() => <Signup onAuthenticated={onAuthenticated}/>}></Route>
           <PrivateRoute path="/dashboard" exact component={Dashboard}></PrivateRoute>
+          <PrivateRoute path="/addprofile" exact component={AddProfile}></PrivateRoute>
         </Switch>
     </Router>
   );
