@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 import DisplayError from './DisplayError'
 import axios from 'axios'
 
-function Signup() {
+function Signup({ onAuthenticated }) {
 
     const [ data, setData ] = useState({
         name: '',
@@ -16,6 +16,8 @@ function Signup() {
     const [ errors, setErrors ] = useState([])
 
     const [ isAuthenticated, setIsAuthenticated ] = useState(false) 
+
+    const [ isLoading, setIsLoading ] = useState(true)
 
     const { name, username, email, password1, password2 } = data
 
@@ -32,16 +34,23 @@ function Signup() {
             const body = { name, username, email, password: password1 }
 
             try {
+
                 const res = await axios.post('http://localhost:5000/register', body, config)
                 console.log(res)
                 localStorage.setItem('token',res.data.token)
                 setIsAuthenticated(true)
+                setIsLoading(false)
+                onAuthenticated(res.data.token, true, false)
 
             } catch ( error ) {
+
                 localStorage.removeItem('token')
                 setErrors(error.response.data.errors)
                 console.log(error.response.data.errors)
                 setIsAuthenticated(false)
+                setIsLoading(true)
+                onAuthenticated('', false, true)
+
             }
 
         }

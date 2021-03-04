@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import DisplayError from './DisplayError'
 import axios from 'axios'
 
-function Login() {
+function Login({ onAuthenticated }) {
 
     const [ data, setData ] = useState({
         username: '',
@@ -14,7 +14,10 @@ function Login() {
 
     const [ isAuthenticated, setIsAuthenticated ] = useState(false)
 
+    const [ isLoading, setIsLoading ] = useState(true)
+
     const { username, password } = data
+
 
     const onSubmit = async (e) => {
 
@@ -29,17 +32,36 @@ function Login() {
         const body = { username, password }
 
         try {
+
             const res = await axios.post('http://localhost:5000/', body, config)
             console.log(res)
             localStorage.setItem('token',res.data.token)
             setIsAuthenticated(true)
+            setIsLoading(false)
+            onAuthenticated(res.data.token, true, false)
+            
         } catch ( error ) {
+
             localStorage.removeItem('token')
             setErrors(error.response.data.errors)
             console.log(error.response.data.errors)
             setIsAuthenticated(false)
+            setIsLoading(true)
+            onAuthenticated('', false, true)
+
         }
+
     }
+
+    useEffect(() => {
+        if(localStorage.getItem('token')){
+            localStorage.removeItem('token')
+        }
+        return  () => {
+            setIsLoading(!isLoading)
+        }
+        
+    }, [] )
 
     if(isAuthenticated) {
         return <Redirect to='/dashboard' />
