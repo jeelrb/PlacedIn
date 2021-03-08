@@ -41,8 +41,8 @@ function Navbar() {
                             <MDBIcon icon="user" />
                             </MDBDropdownToggle>
                             <MDBDropdownMenu className="dropdown-default">
-                                <MDBDropdownItem href="/dashboard/addprofile">Add profile</MDBDropdownItem>
-                                <MDBDropdownItem href="#!">Edit profile</MDBDropdownItem>
+                                <MDBDropdownItem href="/dashboard/profileSettings">Add profile</MDBDropdownItem>
+                                <MDBDropdownItem href="/dashboard/profileSettings">Edit profile</MDBDropdownItem>
                                 <MDBDropdownItem href="#!">Your Posts</MDBDropdownItem>
                                 <MDBDropdownItem divider/>
                                 <MDBDropdownItem href='/'>Logout</MDBDropdownItem>

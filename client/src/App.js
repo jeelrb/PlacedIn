@@ -31,7 +31,7 @@ function App() {
           <Route path="/" exact render={() => <Login onAuthenticated={onAuthenticated}/>}></Route>
           <Route path="/signup" exact render={() => <Signup onAuthenticated={onAuthenticated}/>}></Route>
           <PrivateRoute path="/dashboard" exact component={Dashboard}></PrivateRoute>
-          <PrivateRoute path="/dashboard/addprofile" exact component={AddProfile}></PrivateRoute>
+          <PrivateRoute path="/dashboard/profileSettings" exact component={AddProfile}></PrivateRoute>
         </Switch>
     </Router>
   );

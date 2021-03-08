@@ -5,7 +5,8 @@ import DisplayError from './DisplayError'
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 
 function AddProfile(){
-
+    
+    // State as object containing form fields
     const [ profile, setProfile ] = useState({
         skills: '',
         company: '',
@@ -33,8 +34,10 @@ function AddProfile(){
         githubRepos: []
     })
 
+    // State as boolean value to check if form is successfully submitted
     const [ isSubmited, setIsSubmited ] = useState(false)
 
+    //State as object containing errors
     const [ errors, setErrors ] = useState({
         cfUserNameError: '',
         ccUserNameError: '',
@@ -42,6 +45,58 @@ function AddProfile(){
         batchError: ''
     })
 
+    // Useeffect ( Behaves as => ComponentDidMount ) to fetch data if user has added profile already and wants to edit
+    useEffect(() => {
+
+        //Async function to fetch user profile
+        const FetchData = async() => {    
+            try {
+                //config object containing header with token 
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'auth-token': localStorage.getItem('token')
+                    }
+                }
+
+                //Sending get request to mentioned route
+                const userProfile = await axios.get('http://localhost:5000/profile', config)
+
+                //Destructuring the object returned from the get request
+                const { codeforcesProfile, codechefProfile, education, github, skills, company, portfolio,
+                linkedIn, instagram, facebook, twitter } = userProfile.data[0]
+                const { cfUserName } = codeforcesProfile
+                const { ccUserName } = codechefProfile
+                const { githubUserName } = github
+                const { college, branch, batch, degree } = education[0]
+                
+                //Skills is an array in database...so converting it to string to display in appropriate form
+                const res = skills.toString()
+                let userSkills=''
+                for(let i=0;i<res.length;i++){
+                    if(res[i]===','){
+                        userSkills+=', '
+                    }else{
+                        userSkills+=res[i]
+                    }
+                }
+
+                //Updating the state with the values received from get request
+                setProfile({ skills: userSkills, company, portfolio, linkedIn, instagram, twitter, facebook, 
+                college, degree, branch, batch, cfUserName, ccUserName, githubUserName  })
+
+            } catch (error) {
+                console.log(error)
+            }
+
+        }
+
+        FetchData()
+
+    }, [])
+
+
+    //Async function to store / update user profile on submitting the form
     const onSubmit = async (e) => {
 
         e.preventDefault()
@@ -49,6 +104,8 @@ function AddProfile(){
 
         let cfUserNameError='', ccUserNameError='', githubUserNameError='', batchError=''
         let res1, res2, res3, res4, res5;
+
+        //Sending get requests to third party api for getting cf, cc and github profiles of the user
         try{
             res1 = await axios.get(`https://competitive-coding-api.herokuapp.com/api/codeforces/${profile.cfUserName}`)
             if(res1.data.status==='Failed'){
@@ -66,10 +123,12 @@ function AddProfile(){
             }
         }
 
+        // If username is not valid, update errors state
         if( cfUserNameError || ccUserNameError || githubUserNameError ) {
             return setErrors({ cfUserNameError, ccUserNameError, githubUserNameError })
         }
         
+        // If profile fetched successfully then update profile state with the values received from third party api
         setProfile({ ...profile, 
             cfRating: res1.data.rating,
             cfMaxRating: res1.data.['max rating'],
@@ -83,6 +142,7 @@ function AddProfile(){
             githubRepos: res3.data
         })
 
+        //Destructuring the profile state to include these fields as body in post requests
         const { portfolio, linkedIn, facebook, instagram, twitter, skills, company } = profile
         const { cfUserName, cfRating, cfMaxRating, cfRank, cfMaxRank, cfProfile } = profile
         const { ccUserName, ccRating, ccMaxRating, ccStars, ccProfile } = profile
@@ -96,24 +156,22 @@ function AddProfile(){
                     'auth-token': localStorage.getItem('token')
                 }
             }
+
+            //Body of the post request 
             const profileInfo = { portfolio, linkedIn, facebook, instagram, twitter, skills, company }
             const cfInfo = { cfUserName, cfRating, cfMaxRating, cfRank, cfMaxRank, cfProfile }
             const ccInfo = { ccUserName, ccRating, ccMaxRating, ccStars, ccProfile }
             const githubInfo = { githubUserName, githubRepos }
             const eduInfo = { college, branch, batch, degree }
 
+            //Sending post requests to our REST api to store / update user profile
             res1 = await axios.post('http://localhost:5000/profile', profileInfo, config)
             res2 = await axios.put('http://localhost:5000/profile/codeforcesProfile', cfInfo, config)
             res3 = await axios.put('http://localhost:5000/profile/codechefProfile', ccInfo, config)
             res4 = await axios.put('http://localhost:5000/profile/githubProfile', githubInfo, config)
             res5 = await axios.put('http://localhost:5000/profile/education', eduInfo, config)
 
-            console.log(res1)
-            console.log(res2)
-            console.log(res3)
-            console.log(res4)
-            console.log(res5)
-
+            //If no error occured then change isSubmit to true
             setIsSubmited(true)
 
         } catch (error) {
@@ -122,6 +180,7 @@ function AddProfile(){
         
     }
 
+    // If form submitted successfully then redirect to dashboard
     if(isSubmited) {
         return <Redirect to='/dashboard' />
     }
