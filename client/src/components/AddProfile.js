@@ -132,9 +132,9 @@ function AddProfile(){
         const cfInfo = {
             cfUserName: profile.cfUserName,
             cfRating: res1.data.rating,
-            cfMaxRating: res1.data.['max rating'],
+            cfMaxRating: res1['data']['max rating'],
             cfRank: res1.data.rank, 
-            cfMaxRank: res1.data.['max rank'],
+            cfMaxRank: res1['data']['max rank'],
             cfProfile: `https://codeforces.com/profile/${profile.cfUserName}`,
         }
 
@@ -177,6 +177,7 @@ function AddProfile(){
 
     // If form submitted successfully then redirect to dashboard
     if(isSubmited) {
+        alert('Profile added successfully!!')
         return <Redirect to='/dashboard' />
     }
 
