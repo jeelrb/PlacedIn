@@ -41,7 +41,21 @@ router.post('/', [ auth, [
     if(skills){
         profileFields.skills = skills.split(',').map((skill) => skill.trim())
     }
-
+    /*profileFields.codeforcesProfile = {
+        cfMaxRank: '',
+        cfMaxRating: '',
+        cfProfile: '',
+        cfRank: '',
+        cfRating: '',
+        cfUserName: ''
+    }
+    profileFields.codechefProfile = {
+        ccProfile: '',
+        ccRating: '',
+        ccStars: '',
+        ccMaxRating: '',
+        ccUserName: ''
+    }*/
     try {
 
         let profile = await Profile.findOne({ userId: req.user.id })

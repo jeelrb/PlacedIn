@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
 import Posts from './Posts'
@@ -7,6 +7,11 @@ import { MDBContainer, MDBRow } from "mdbreact";
 import { BrowserRouter as Router } from 'react-router-dom';
 
 function Dashboard() {
+
+    useEffect(() => {
+        window.scrollTo(0, 0);    
+    }, [])
+
     return (
         <Router>
             <Navbar />

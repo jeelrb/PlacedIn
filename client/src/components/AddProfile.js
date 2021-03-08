@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import Navbar from './Navbar';
 import DisplayError from './DisplayError'
-import { BrowserRouter as Router, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
+toast.configure()
 function AddProfile(){
     
     // State as object containing form fields
@@ -35,6 +38,8 @@ function AddProfile(){
         batchError: ''
     })
 
+    const history = useHistory()
+
     // Useeffect ( Behaves as => ComponentDidMount ) to fetch data if user has added profile already and wants to edit
     useEffect(() => {
 
@@ -52,14 +57,13 @@ function AddProfile(){
                 //Sending get request to mentioned route
                 const userProfile = await axios.get('http://localhost:5000/profile/me', config)
 
-                console.log(userProfile)
-
                 //Destructuring the object returned from the get request
                 const { codeforcesProfile, codechefProfile, education, github, skills, company, portfolio,
                 linkedIn, instagram, facebook, twitter } = userProfile.data
-                const { cfUserName } = codeforcesProfile
-                const { ccUserName } = codechefProfile
-                const { githubUserName } = github
+                let cfUserName, ccUserName, githubUserName
+                if(codeforcesProfile) cfUserName = codeforcesProfile.cfUserName
+                if(codechefProfile) ccUserName  = codechefProfile.ccUserName 
+                if(github) githubUserName = github.githubUserName
                 const { college, branch, batch, degree } = education[0]
                 
                 //Skills is an array in database...so converting it to string to display in appropriate form
@@ -92,22 +96,32 @@ function AddProfile(){
     const onSubmit = async (e) => {
 
         e.preventDefault()
+
         console.log(profile)
 
         let cfUserNameError='', ccUserNameError='', githubUserNameError='', batchError=''
         let res1, res2, res3, res4, res5;
 
         //Sending get requests to third party api for getting cf, cc and github profiles of the user
+        toast.info('Please wait', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1500
+        })
         try{
-            res1 = await axios.get(`https://competitive-coding-api.herokuapp.com/api/codeforces/${profile.cfUserName}`)
-            if(res1.data.status==='Failed'){
-                cfUserNameError = 'Please enter valid codeforces user handle'
+            if(profile.cfUserName) {
+                res1 = await axios.get(`https://competitive-coding-api.herokuapp.com/api/codeforces/${profile.cfUserName}`)
+                if(res1.data.status==='Failed'){
+                    cfUserNameError = 'Please enter valid codeforces user handle'
+                }
             }
-            res2 = await axios.get(`https://competitive-coding-api.herokuapp.com/api/codechef/${profile.ccUserName}`)
-            if(res2.data.status==='Failed'){
-                ccUserNameError = 'Please enter valid codechef user handle'
+            if(profile.ccUserName) {
+                res2 = await axios.get(`https://competitive-coding-api.herokuapp.com/api/codechef/${profile.ccUserName}`)
+                if(res2.data.status==='Failed'){
+                    ccUserNameError = 'Please enter valid codechef user handle'
+                }
             }
-            res3 = await axios.get(`https://api.github.com/users/${profile.githubUserName}/repos`)
+            if(profile.githubUserName)
+                res3 = await axios.get(`https://api.github.com/users/${profile.githubUserName}/repos`)
 
         } catch ( error ){
             if(error.response.data.message==='Not Found'){
@@ -129,26 +143,34 @@ function AddProfile(){
 
         const eduInfo = { college, branch, batch, degree }
 
-        const cfInfo = {
-            cfUserName: profile.cfUserName,
-            cfRating: res1.data.rating,
-            cfMaxRating: res1['data']['max rating'],
-            cfRank: res1.data.rank, 
-            cfMaxRank: res1['data']['max rank'],
-            cfProfile: `https://codeforces.com/profile/${profile.cfUserName}`,
+        let cfInfo, ccInfo, githubInfo
+
+        if(profile.cfUserName) {
+            cfInfo = {
+                cfUserName: profile.cfUserName,
+                cfRating: res1.data.rating,
+                cfMaxRating: res1['data']['max rating'],
+                cfRank: res1.data.rank, 
+                cfMaxRank: res1['data']['max rank'],
+                cfProfile: `https://codeforces.com/profile/${profile.cfUserName}`,
+            }
         }
 
-        const ccInfo = {
-            ccUserName: profile.ccUserName,
-            ccRating: res2.data.rating,
-            ccMaxRating: res2.data.highest_rating,
-            ccStars: res2.data.stars,
-            ccProfile: `https://www.codechef.com/users/${profile.ccUserName}`,
+        if(profile.ccUserName) {
+            ccInfo = {
+                ccUserName: profile.ccUserName,
+                ccRating: res2.data.rating,
+                ccMaxRating: res2.data.highest_rating,
+                ccStars: res2.data.stars,
+                ccProfile: `https://www.codechef.com/users/${profile.ccUserName}`,
+            }
         }
 
-        const githubInfo = {
-            githubUserName: profile.githubUserName,
-            githubRepos: res3.data
+        if(profile.githubUserName) {
+            githubInfo = {
+                githubUserName: profile.githubUserName,
+                githubRepos: res3.data
+            }
         }
 
         try {
@@ -161,13 +183,18 @@ function AddProfile(){
 
             //Sending post requests to our REST api to store / update user profile
             res1 = await axios.post('http://localhost:5000/profile', profileInfo, config)
-            res2 = await axios.put('http://localhost:5000/profile/codeforcesProfile', cfInfo, config)
-            res3 = await axios.put('http://localhost:5000/profile/codechefProfile', ccInfo, config)
-            res4 = await axios.put('http://localhost:5000/profile/githubProfile', githubInfo, config)
+            if(profile.cfUserName)res2 = await axios.put('http://localhost:5000/profile/codeforcesProfile', cfInfo, config)
+            if(profile.ccUserName)res3 = await axios.put('http://localhost:5000/profile/codechefProfile', ccInfo, config)
+            if(profile.githubUserName)res4 = await axios.put('http://localhost:5000/profile/githubProfile', githubInfo, config)
             res5 = await axios.put('http://localhost:5000/profile/education', eduInfo, config)
 
             //If no error occured then change isSubmit to true
             setIsSubmited(true)
+
+            toast.success('Profile added successfully!!', { 
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 2000
+             })
 
         } catch (error) {
             console.log(error.response)
@@ -177,7 +204,6 @@ function AddProfile(){
 
     // If form submitted successfully then redirect to dashboard
     if(isSubmited) {
-        alert('Profile added successfully!!')
         return <Redirect to='/dashboard' />
     }
 
@@ -328,7 +354,7 @@ function AddProfile(){
                     </div>
                     <br></br>
                     <button className="btn btn-1 text-white" type="submit">Submit</button>
-                    <button className="btn btn-2 text-black" type="submit">Go back</button>
+                    <button className="btn btn-2 text-black" type="button" >Go back</button>
                 </form>
                 </div>
             </div>
