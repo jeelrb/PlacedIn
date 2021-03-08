@@ -16,16 +16,19 @@ const userProfile = new Schema({
         cfRating: Number,
         cfMaxRating: Number,
         cfRank: String,
+        cfMaxRank: String,
+        cfProfile: String
     },
     codechefProfile: {
         ccUserName: String,
         ccRating: Number,
         ccMaxRating: Number,
-        ccRank: String,
+        ccStars: String,
+        ccProfile: String
     },
     github: {
         githubUserName: String,
-        githubRepo: [],
+        githubRepos: [],
     },
     portfolio: String,
     company: String,
@@ -51,12 +54,6 @@ const userProfile = new Schema({
                 type: String,
                 required: true
             },
-            from: {
-                type: String,
-            },
-            to: {
-                type: String,
-            }
         }
     ]
 },{

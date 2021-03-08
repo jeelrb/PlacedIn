@@ -138,12 +138,14 @@ router.put('/codeforcesProfile', [ auth, [
         return res.json({ errors: errors.array() })
     }
 
-    const { cfUserName } = req.body
+    const { cfUserName, cfRating, cfMaxRating, cfRank, cfMaxRank, cfProfile } = req.body
 
     try {
 
         const profile = await Profile.findOne({ userId: req.user.id })
-        profile.codeforcesProfile.cfUserName = cfUserName
+        profile.codeforcesProfile = {
+            cfUserName, cfRating, cfMaxRating, cfRank, cfMaxRank, cfProfile
+        }
         await profile.save()
         res.json(profile)
 
@@ -182,11 +184,14 @@ router.put('/codechefProfile', [ auth, [
         return res.json({ errors: errors.array() })
     }
 
-    const { ccUserName } = req.body
+    const { ccUserName, ccRating, ccMaxRating, ccStars, ccProfile } = req.body
 
     try {      
         const profile = await Profile.findOne({ userId: req.user.id })
-        profile.codechefProfile.ccUserName = ccUserName
+        console.log(profile)
+        profile.codechefProfile = {
+            ccUserName, ccRating, ccMaxRating, ccStars, ccProfile
+        }
         await profile.save()
         res.json(profile)
     } catch (error){
@@ -222,12 +227,13 @@ router.put('/githubProfile', [ auth, [
         return res.json({ errors: errors.array() })
     }
 
-    const { githubUserName } = req.body
+    const { githubUserName, githubRepos } = req.body
 
     try {
         
         const profile = await Profile.findOne({ userId: req.user.id })
         profile.github.githubUserName = githubUserName
+        profile.github.githubRepos = githubRepos
         await profile.save()
         res.json(profile)
 
@@ -267,7 +273,7 @@ router.put('/education', [ auth, [
         return res.json({ errors: errors.array() })
     }
 
-    const { college, branch, degree, batch, from, to } = req.body
+    const { college, branch, degree, batch } = req.body
 
     try {
 
@@ -278,8 +284,6 @@ router.put('/education', [ auth, [
             degree,
             batch,
         }
-        if(from)newEdu.from = from
-        if(to)newEdu.to = to
 
         if(!profile.education)profile.education = []
         profile.education.unshift(newEdu)

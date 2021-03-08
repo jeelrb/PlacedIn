@@ -9,7 +9,7 @@ function DisplayError(props) {
     const { error } = props
 
     return (
-        <div style={{color: "red", "padding-left": "100px"}}>
+        <div style={{color: "red"}}>
             { error }
         </div>
     )

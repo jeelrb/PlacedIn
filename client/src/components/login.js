@@ -22,6 +22,8 @@ function Login({ onAuthenticated }) {
     const onSubmit = async (e) => {
 
         e.preventDefault()
+        
+        console.log(data)
 
         const config = {
             headers: {
@@ -55,7 +57,7 @@ function Login({ onAuthenticated }) {
 
     useEffect(() => {
         if(localStorage.getItem('token')){
-            localStorage.removeItem('token')
+            localStorage.removeItem('token') 
         }
         return  () => {
             setIsLoading(!isLoading)

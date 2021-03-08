@@ -225,3 +225,22 @@ a:hover {
   min-height: 500px;
   overflow: hidden;
 }
+
+.form-control-label {
+  font-weight: 500;
+  color: #00838f;
+}
+
+.card-header{
+  background-color: #0d47a1 !important;
+}
+
+.btn-1 {
+  background-color: #0d47a1 !important;
+  color: white;
+}
+
+.btn-2 {
+  background-color: #bbdefb !important;
+  color: black;
+} 
