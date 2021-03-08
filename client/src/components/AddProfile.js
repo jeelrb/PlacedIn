@@ -20,18 +20,8 @@ function AddProfile(){
         branch: '',
         batch: '',
         cfUserName: '',
-        cfRating: '',
-        cfMaxRating: '',
-        cfRank: '',
-        cfMaxRank: '',
-        cfProfile: '',
         ccUserName: '',
-        ccRating: '',
-        ccMaxRating: '',
-        ccStars: '',
-        ccProfile: '',
         githubUserName: '',
-        githubRepos: []
     })
 
     // State as boolean value to check if form is successfully submitted
@@ -41,7 +31,7 @@ function AddProfile(){
     const [ errors, setErrors ] = useState({
         cfUserNameError: '',
         ccUserNameError: '',
-        githubUserName: '',
+        githubUserNameError: '',
         batchError: ''
     })
 
@@ -60,11 +50,13 @@ function AddProfile(){
                 }
 
                 //Sending get request to mentioned route
-                const userProfile = await axios.get('http://localhost:5000/profile', config)
+                const userProfile = await axios.get('http://localhost:5000/profile/me', config)
+
+                console.log(userProfile)
 
                 //Destructuring the object returned from the get request
                 const { codeforcesProfile, codechefProfile, education, github, skills, company, portfolio,
-                linkedIn, instagram, facebook, twitter } = userProfile.data[0]
+                linkedIn, instagram, facebook, twitter } = userProfile.data
                 const { cfUserName } = codeforcesProfile
                 const { ccUserName } = codechefProfile
                 const { githubUserName } = github
@@ -128,26 +120,36 @@ function AddProfile(){
             return setErrors({ cfUserNameError, ccUserNameError, githubUserNameError })
         }
         
-        // If profile fetched successfully then update profile state with the values received from third party api
-        setProfile({ ...profile, 
+        //Destructuring the profile state to include these fields as body in post requests
+        const { portfolio, linkedIn, facebook, instagram, twitter, skills, company } = profile
+        const { college, branch, batch, degree } = profile
+
+        //Body of the post request 
+        const profileInfo = { portfolio, linkedIn, facebook, instagram, twitter, skills, company }
+
+        const eduInfo = { college, branch, batch, degree }
+
+        const cfInfo = {
+            cfUserName: profile.cfUserName,
             cfRating: res1.data.rating,
             cfMaxRating: res1.data.['max rating'],
             cfRank: res1.data.rank, 
             cfMaxRank: res1.data.['max rank'],
             cfProfile: `https://codeforces.com/profile/${profile.cfUserName}`,
+        }
+
+        const ccInfo = {
+            ccUserName: profile.ccUserName,
             ccRating: res2.data.rating,
             ccMaxRating: res2.data.highest_rating,
             ccStars: res2.data.stars,
             ccProfile: `https://www.codechef.com/users/${profile.ccUserName}`,
-            githubRepos: res3.data
-        })
+        }
 
-        //Destructuring the profile state to include these fields as body in post requests
-        const { portfolio, linkedIn, facebook, instagram, twitter, skills, company } = profile
-        const { cfUserName, cfRating, cfMaxRating, cfRank, cfMaxRank, cfProfile } = profile
-        const { ccUserName, ccRating, ccMaxRating, ccStars, ccProfile } = profile
-        const { githubUserName, githubRepos } = profile
-        const { college, branch, batch, degree } = profile
+        const githubInfo = {
+            githubUserName: profile.githubUserName,
+            githubRepos: res3.data
+        }
 
         try {
             const config = {
@@ -156,13 +158,6 @@ function AddProfile(){
                     'auth-token': localStorage.getItem('token')
                 }
             }
-
-            //Body of the post request 
-            const profileInfo = { portfolio, linkedIn, facebook, instagram, twitter, skills, company }
-            const cfInfo = { cfUserName, cfRating, cfMaxRating, cfRank, cfMaxRank, cfProfile }
-            const ccInfo = { ccUserName, ccRating, ccMaxRating, ccStars, ccProfile }
-            const githubInfo = { githubUserName, githubRepos }
-            const eduInfo = { college, branch, batch, degree }
 
             //Sending post requests to our REST api to store / update user profile
             res1 = await axios.post('http://localhost:5000/profile', profileInfo, config)
@@ -204,37 +199,37 @@ function AddProfile(){
                         <div className="row">
                             <div className="col-md-6">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" for="input-college">College <span className="text-danger">*</span></label>
+                                    <label className="form-control-label" htmlFor="input-college">College <span className="text-danger">*</span></label>
                                     <input id="input-12" className="form-control form-control-alternative" placeholder="Enter College / University Name" 
-                                    type="text" value = {profile.college} onChange={ e => setProfile({...profile, college: e.target.value }) } required />
+                                    type="text" value = { profile.college || '' } onChange={ e => setProfile({...profile, college: e.target.value }) } required />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" for="input-degree">Degree <span className="text-danger">*</span></label>
+                                    <label className="form-control-label" htmlFor="input-degree">Degree <span className="text-danger">*</span></label>
                                     <input id="input-10" className="form-control form-control-alternative" placeholder="Enter Degree ( Eg. B.Tech )" 
-                                    type="text" value = {profile.degree} onChange={ e => setProfile({...profile, degree: e.target.value }) } required />
+                                    type="text" value = { profile.degree || '' } onChange={ e => setProfile({...profile, degree: e.target.value }) } required />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" for="input-fieldofstudy">Field of Study <span className="text-danger">*</span></label>
+                                    <label className="form-control-label" htmlFor="input-fieldofstudy">Field of Study <span className="text-danger">*</span></label>
                                     <input id="input-job" className="form-control form-control-alternative" placeholder="Enter Field of study" 
-                                    type="text" value = {profile.branch} onChange={ e => setProfile({...profile, branch: e.target.value }) } required />
+                                    type="text" value = { profile.branch || ''} onChange={ e => setProfile({...profile, branch: e.target.value }) } required />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" for="input-batch">Batch <span className="text-danger">*</span></label>
+                                    <label className="form-control-label" htmlFor="input-batch">Batch <span className="text-danger">*</span></label>
                                     <input id="input-job" className="form-control form-control-alternative" placeholder="Enter your passing year ( Eg. 2022 )" 
-                                    type="string" value = {profile.batch} onChange={ e => setProfile({...profile, batch: e.target.value }) } required />
+                                    type="string" value = { profile.batch || '' } onChange={ e => setProfile({...profile, batch: e.target.value }) } required />
                                 </div>
                             </div>
                             <div className="col-md-12">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" for="input-company">Company</label>
+                                    <label className="form-control-label" htmlFor="input-company">Company</label>
                                     <input id="input-job" className="form-control form-control-alternative" placeholder="Enter name of the company you are placed in" 
-                                    type="text" value={ profile.company } onChange={ e => setProfile({...profile, company: e.target.value }) } />
+                                    type="text" value={ profile.company || '' } onChange={ e => setProfile({...profile, company: e.target.value }) } />
                                 </div>
                             </div>
                         </div>
@@ -245,9 +240,9 @@ function AddProfile(){
                         <div className="row">
                             <div className="col-md-12">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" for="input-skill1">Skills <span className="text-danger">*</span></label>
+                                    <label className="form-control-label" htmlFor="input-skill1">Skills <span className="text-danger">*</span></label>
                                     <input id="input-skill1" className="form-control form-control-alternative" placeholder="Enter comma separated values" 
-                                    type="text" value={ profile.skills } onChange={ e => setProfile({...profile, skills: e.target.value }) } required />
+                                    type="text" value={ profile.skills || '' } onChange={ e => setProfile({...profile, skills: e.target.value }) } required />
                                 </div>
                             </div>
                         </div>
@@ -258,26 +253,26 @@ function AddProfile(){
                         <div className="row">
                             <div className="col-lg-4">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" for="input-codeforces">Codeforces</label>
+                                    <label className="form-control-label" htmlFor="input-codeforces">Codeforces</label>
                                     <input id="input-codeforces" className="form-control form-control-alternative" placeholder="Enter Codeforced Handle" 
-                                    type="text"  value={ profile.cfUserName } onChange={ e => setProfile({...profile, cfUserName: e.target.value }) } />
+                                    type="text"  value={ profile.cfUserName || '' } onChange={ e => setProfile({...profile, cfUserName: e.target.value }) } />
                                 </div>
                                 { errors.cfUserNameError && <DisplayError error={ errors.cfUserNameError }/> }
                             </div>
                             <div className="col-lg-4">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" for="input-codechef">Codechef</label>
+                                    <label className="form-control-label" htmlFor="input-codechef">Codechef</label>
                                     <input type="text" id="input-codechef" className="form-control form-control-alternative" placeholder="Enter Codechef Handle" 
-                                        value={ profile.ccUserName } onChange={ e => setProfile({...profile, ccUserName: e.target.value }) }
+                                        value={ profile.ccUserName || '' } onChange={ e => setProfile({...profile, ccUserName: e.target.value }) }
                                     />
                                 </div>
                                 { errors.ccUserNameError && <DisplayError error={ errors.ccUserNameError }/> }
                             </div>
                             <div className="col-lg-4">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" for="input-github">Github</label>
+                                    <label className="form-control-label" htmlFor="input-github">Github</label>
                                     <input type="text" id="input-github" className="form-control form-control-alternative" placeholder="Enter Github ID" 
-                                        value={ profile.githubUserName } onChange={ e => setProfile({...profile, githubUserName: e.target.value }) }
+                                        value={ profile.githubUserName || '' } onChange={ e => setProfile({...profile, githubUserName: e.target.value }) }
                                     />
                                 </div>
                                 { errors.githubUserNameError && <DisplayError error={ errors.githubUserNameError }/> }
@@ -290,41 +285,41 @@ function AddProfile(){
                         <div className="row">
                             <div className="col-lg-12">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" for="input-website">Portfolio Website</label>
+                                    <label className="form-control-label" htmlFor="input-website">Portfolio Website</label>
                                     <input type="text" id="input-website" className="form-control form-control-alternative" placeholder="Enter your Website Here" 
-                                     value={ profile.portfolio }   onChange={ e => setProfile({...profile, portfolio: e.target.value }) } />
+                                     value={ profile.portfolio || '' }   onChange={ e => setProfile({...profile, portfolio: e.target.value }) } />
                                 </div>
                             </div>
                             <div className="col-lg-6">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" for="input-linkedin">Linkedin</label>
+                                    <label className="form-control-label" htmlFor="input-linkedin">Linkedin</label>
                                     <input type="text" id="input-linkedin" className="form-control form-control-alternative" placeholder="Enter Linkedin ID" 
-                                        value={ profile.linkedIn }   onChange={ e => setProfile({...profile, linkedIn: e.target.value }) }
+                                        value={ profile.linkedIn || '' }   onChange={ e => setProfile({...profile, linkedIn: e.target.value }) }
                                     />
                                 </div>
                             </div>
                             <div className="col-lg-6">
                                 <div className="form-group">
-                                    <label className="form-control-label" for="input-insta">Instagram</label>
+                                    <label className="form-control-label" htmlFor="input-insta">Instagram</label>
                                     <input type="text" id="input-insta" className="form-control form-control-alternative" placeholder="Enter Instagram ID" 
-                                        value={ profile.instagram }   onChange={ e => setProfile({...profile, instagram: e.target.value }) }
+                                        value={ profile.instagram || '' }   onChange={ e => setProfile({...profile, instagram: e.target.value }) }
                                     />
                                 </div>
                             </div>
                             
                             <div className="col-lg-6">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" for="input-twitter">Twitter</label>
+                                    <label className="form-control-label" htmlFor="input-twitter">Twitter</label>
                                     <input type="text" id="input-twitter" className="form-control form-control-alternative" placeholder="Enter Twitter ID" 
-                                        value={ profile.twitter }   onChange={ e => setProfile({...profile, twitter: e.target.value }) }
+                                        value={ profile.twitter || '' }   onChange={ e => setProfile({...profile, twitter: e.target.value }) }
                                     />
                                 </div>
                             </div>
                             <div className="col-lg-6">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" for="input-facebook">Facebook</label>
+                                    <label className="form-control-label" htmlFor="input-facebook">Facebook</label>
                                     <input type="text" id="input-facebook" className="form-control form-control-alternative" placeholder="Enter Facebook ID" 
-                                        value={ profile.facebook }   onChange={ e => setProfile({...profile, facebook: e.target.value }) }
+                                        value={ profile.facebook || '' }   onChange={ e => setProfile({...profile, facebook: e.target.value }) }
                                     />
                                 </div>
                             </div>
