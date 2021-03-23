@@ -3,7 +3,7 @@ import {MDBContainer, MDBBtn,  MDBRow, MDBCol } from "mdbreact";
 
 function Post() {
     return(
-        <MDBCol className="post pr-3 pb-4" md="7">
+        <MDBCol className="post pr-3 pb-4" lg="7">
             <MDBContainer fluid className="post_container">
                 <MDBRow>
                     <MDBCol md="6">

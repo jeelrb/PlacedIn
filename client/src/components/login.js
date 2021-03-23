@@ -40,7 +40,7 @@ function Login({ onAuthenticated }) {
             localStorage.setItem('token',res.data.token)
             setIsAuthenticated(true)
             setIsLoading(false)
-            onAuthenticated(res.data.token, true, false)
+            onAuthenticated(username, res.data.token, true, false)
             
         } catch ( error ) {
 
@@ -49,7 +49,7 @@ function Login({ onAuthenticated }) {
             console.log(error.response.data.errors)
             setIsAuthenticated(false)
             setIsLoading(true)
-            onAuthenticated('', false, true)
+            onAuthenticated('', '', false, true)
 
         }
 

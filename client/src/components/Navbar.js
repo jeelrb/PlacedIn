@@ -16,8 +16,8 @@ function Navbar() {
     }
 
     return(
-        <Router>
-            <MDBNavbar color="blue darken-2" dark expand="md">
+        <>
+            <MDBNavbar color="blue-grey" dark expand="md" className="sticky-top">
             <MDBNavbarBrand>
                 <strong className="white-text">PlacedIn</strong>
             </MDBNavbarBrand>
@@ -25,10 +25,10 @@ function Navbar() {
             <MDBCollapse id="navbarCollapse3" isOpen={isOpen} navbar>
                 <MDBNavbarNav left>
                     <MDBNavItem active>
-                    <MDBNavLink className="navbar_item" to="#!">Home</MDBNavLink>
+                    <MDBNavLink className="navbar_item" to="/dashboard">Home</MDBNavLink>
                     </MDBNavItem>
                     <MDBNavItem>
-                    <MDBNavLink className="navbar_item" to="#!">Colleagues</MDBNavLink>
+                    <MDBNavLink className="navbar_item" to="/dashboard/profiles">Colleagues</MDBNavLink>
                     </MDBNavItem>
                     <MDBNavItem>
                     <MDBNavLink className="navbar_item" to="#!">Interview Experiences</MDBNavLink>
@@ -52,7 +52,7 @@ function Navbar() {
                 </MDBNavbarNav>
             </MDBCollapse>
             </MDBNavbar> 
-        </Router>
+        </>
     )
 }
 

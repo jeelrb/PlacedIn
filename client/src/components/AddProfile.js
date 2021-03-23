@@ -208,7 +208,7 @@ function AddProfile(){
     }
 
     return (
-        <Router>
+        <>
             <Navbar />
                 <div className="container mt-4">
                 <div className="card shadow">
@@ -359,7 +359,7 @@ function AddProfile(){
                 </div>
             </div>
         </div>
-        </Router>
+        </>
     )
 }
 

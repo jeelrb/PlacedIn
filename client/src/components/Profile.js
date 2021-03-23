@@ -1,168 +1,283 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from 'axios'
 import Navbar from './Navbar';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { MDBContainer,MDBCol,MDBRow, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText } from "mdbreact";
+import { MDBContainer,MDBCol,MDBRow, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBIcon } from "mdbreact";
 
-function Profile(){
+function Profile(props){
+
+    const [ userData, setUserData ] = useState({
+        name: '',
+        company: '',
+        twitter: '',
+        instagram: '',
+        facebook: '',
+        linkedIn: '',
+        portfolio: '',
+        college: '',
+        degree: '',
+        branch: '',
+        batch: '',
+        skills: '',
+        cfUserName: '',
+        cfRating: '',
+        cfRank: '',
+        cfMaxRating: '',
+        cfMaxRank: '',
+        cfProfile: '',
+        ccUserName: '',
+        ccRating: '',
+        ccRank: '',
+        ccMaxRating: '',
+        ccMaxRank: '',
+        ccProfile: '',
+        githubUserName: '',
+        githubRepos: [],
+        githubProfile: ''
+    })
+
+    useEffect(() => {
+        console.log(localStorage.getItem('userData'))
+        const fetchUser = async () => {
+
+            if(localStorage.getItem('user')){
+                localStorage.removeItem('user')
+            }
+
+            try{
+
+                const userId = props.location.userId
+
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'auth-token': localStorage.getItem('token')
+                    }
+                }
+
+                const res = await axios.get(`http://localhost:5000/profile/${userId}`, config)
+                
+                const { codeforcesProfile, codechefProfile, education, github, skills, company, portfolio,
+                linkedIn, instagram, facebook, twitter } = res.data
+
+                const { college, branch, batch, degree } = education[0]
+
+                const temp = skills.toString()
+                let userSkills=''
+                for(let i=0;i<temp.length;i++){
+                    if(temp[i]===','){
+                        userSkills+=', '
+                    }else{
+                        userSkills+=temp[i]
+                    }
+                }
+
+                let cfUserName, cfRating, cfMaxRating, cfRank, cfMaxRank, cfProfile, ccUserName, ccRank, ccRating, ccMaxRating, ccMaxRank, ccProfile, githubUserName, githubRepos
+                if(codeforcesProfile){
+                    cfUserName = codeforcesProfile.cfUserName
+                    cfRating = codeforcesProfile.cfRating
+                    cfMaxRating = codeforcesProfile.cfMaxRating
+                    cfRank = codeforcesProfile.cfRank
+                    cfMaxRank = codeforcesProfile.cfMaxRank
+                    cfProfile = codeforcesProfile.cfProfile
+                }
+                if(codechefProfile){
+                    ccUserName  = codechefProfile.ccUserName 
+                    ccRating = codechefProfile.ccRating 
+                    ccMaxRating = codechefProfile.ccMaxRating
+                    ccRank = Number(codechefProfile.ccStars[0]) 
+                    if(ccMaxRating<=1399)ccMaxRank = 1
+                    else if(ccMaxRating<=1599)ccMaxRank = 2
+                    else if(ccMaxRating<=1799)ccMaxRank = 3
+                    else if(ccMaxRating<=1999)ccMaxRank = 4
+                    else if(ccMaxRating<=2199)ccMaxRank = 5
+                    else if(ccMaxRating<=2499)ccMaxRank = 6
+                    else ccMaxRank = 7
+                    ccProfile = codechefProfile.ccProfile 
+                }
+                if(github){
+                    githubUserName = github.githubUserName
+                    githubRepos = github.githubRepos.map((repo) => {
+                        return { name: repo.name, fullName: repo.full_name, id: repo.id }
+                    })
+                }
+
+                const githubProfile = `https://github.com/${githubUserName}`
+
+                setUserData({ skills: userSkills, name: res.data.userId.name, company, portfolio, twitter, instagram, linkedIn, facebook, college, degree, branch, batch, cfUserName, ccUserName, cfRating, ccRating, cfRank, ccRank, cfMaxRating, ccMaxRating, cfMaxRank, ccMaxRank, cfProfile, ccProfile, githubUserName, githubRepos, githubProfile })
+
+                localStorage.setItem('user', JSON.stringify({ skills: userSkills, name: res.data.userId.name, company, portfolio, twitter, instagram, linkedIn, facebook, college, degree, branch, batch, cfUserName, ccUserName, cfRating, ccRating, cfRank, ccRank, cfMaxRating, ccMaxRating, cfMaxRank, ccMaxRank, cfProfile, ccProfile, githubUserName, githubRepos, githubProfile }))
+                // console.log(userData.githubRepos)
+    
+            } catch (error) {
+                console.log(error.response.data.msg)
+            }
+
+        }
+
+        if(props.location.userId) fetchUser()
+        else setUserData(JSON.parse(localStorage.getItem('user')))
+
+    }, [])
+
     return(
-        <Router>
-            <Navbar></Navbar>
-            <MDBContainer mt="4" className="details_container">
-                <MDBRow className="mt-3">
-                    <MDBCol md="4">
+        <>
+            <Navbar ></Navbar>
+            <MDBContainer mt="4" className="mt-4 details_container">
+                <MDBRow className="mt-4">
+                    <MDBCol md="12">   
+                        <MDBCard className="card_container text-center  blue-grey darken-2">
+                            <MDBRow className="mb-4">
+                                <MDBCol>
+                                    <MDBCardBody className="mt-5">
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" className="rounded-circle white" width="200"></img>
+                                        <MDBCardTitle className="white-text mt-3">{userData.name}</MDBCardTitle>
+                                        <MDBCardText className="white-text">{userData.company}</MDBCardText>
+                                    </MDBCardBody>
+                                </MDBCol>
+                            </MDBRow>
+                            <MDBRow className="mb-4 text-center">
+                                <MDBCol className="text-center">
+                                    {
+                                        userData.twitter && <a href={userData.twitter}>
+                                        <MDBIcon size="2x" className="white-text pr-4 profile_logo" fab icon="twitter" />
+                                        </a>
+                                    }
+                                    {
+                                        userData.instagram && <a href={userData.instagram}>
+                                        <MDBIcon size="2x" className="white-text pr-4 profile_logo" fab icon="instagram" />
+                                        </a>
+                                    }
+                                    {
+                                        userData.facebook && <a href={userData.facebook}>
+                                        <MDBIcon size="2x" className="white-text pr-4 profile_logo" fab icon="facebook" />
+                                        </a>
+                                    }
+                                    {
+                                        userData.linkedIn && <a href={userData.linkedIn}>
+                                        <MDBIcon size="2x" className="white-text pr-4 profile_logo" fab icon="linkedin" />
+                                        </a>
+                                    }
+                                </MDBCol>
+                            </MDBRow>
+                            <hr class="hr-text" data-content="Education"></hr>
+                            <MDBRow className="mb-4">
+                                <MDBCardBody>
+                                    <h6 className="white-text">{ userData.college }</h6>
+                                    <h6 className="white-text">{ userData.degree } in { userData.branch }</h6>
+                                    <h6 className="white-text">Batch - { userData.batch }</h6>
+                                </MDBCardBody>
+                            </MDBRow>
+                            <hr class="hr-text" data-content="Skills"></hr>
+                            <MDBRow className="mb-4">
+                                <MDBCardBody>
+                                    <h6 className="white-text">
+                                        { userData.skills }
+                                    </h6>
+                                </MDBCardBody>
+                            </MDBRow>
+                        </MDBCard>
+                    </MDBCol>
+                </MDBRow>{ (userData.cfUserName || userData.ccUserName) && 
+                <MDBRow className="mt-5">{ userData.cfUserName && 
+                    <MDBCol className="mb-5" md="6">
                         <MDBCard className="text-center">
                             <MDBCardBody>
-                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150"></img>
-                                <MDBCardTitle className="mt-3">Hrujul Thumar</MDBCardTitle>
-                                <MDBCardText><h5>Deutsche Bank</h5></MDBCardText>
-                                <MDBCardText>Kokilaben Dhirubhai Ambani Vidyamandir</MDBCardText>
+                                <MDBRow>
+                                    <MDBCol md="12">
+                                        <MDBRow>
+                                            <MDBCol className="text-center mt-4"><h5 className="font-weight"><img className="profile-img" src="https://lh3.googleusercontent.com/WsR_f03nbqW3qZjCZeXUYmnmhSWXo3hQhLX9hgl9QHydCgbXQi_VJeAwnmtuIgTHKdQ=s200" alt="" width="50"></img>Codeforces</h5></MDBCol>
+                                        </MDBRow>
+                                        <br/>
+                                        <h5 className="text-info font-weight-bolder">{ userData.cfRating }</h5>
+                                        <h6 className="text-muted">Codeforces Rating</h6><hr />
+                                        <h5 className="text-info font-weight-bolder">{ userData.cfRank }</h5>
+                                        <h6 className="text-muted">Codeforces Rank</h6><hr />
+                                        <h5 className="text-danger font-weight-bolder">{ userData.cfMaxRating }</h5>
+                                        <h6 className="text-muted">Highest Rating</h6><hr></hr>
+                                        <h5 className="text-danger font-weight-bolder">{ userData.cfMaxRank }</h5>
+                                        <h6 className="text-muted">Highest Rank</h6><br /><br />
+                                    </MDBCol>
+                                    <MDBCol className="text-muted text-center" md="12">
+                                        <a href={userData.cfProfile}>
+                                            <h5 className='text-primary'>See profile
+                                                <MDBIcon icon='chevron-right' className='ml-2' size='sm'></MDBIcon>
+                                            </h5>
+                                        </a>    
+                                    </MDBCol>
+                                </MDBRow>
                             </MDBCardBody>
                         </MDBCard>
-                        <MDBCard className="mt-5 text-center">
+                    </MDBCol>}{ userData.ccUserName &&  
+                    <MDBCol className="mb-5" md="6">
+                        <MDBCard className="text-center">
                             <MDBCardBody>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe mr-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Portfolio Website</h6>
-                                    <span class="text-secondary">https://bootdey.com</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em"  preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2a2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><path d="M2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></g></svg>      LinkedIn</h6>
-                                    <span class="text-secondary">bootdey</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter mr-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>Twitter</h6>
-                                    <span class="text-secondary">@Hrujul</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram mr-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</h6>
-                                    <span class="text-secondary">@hrujul</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook mr-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>Facebook</h6>
-                                    <span class="text-secondary">@hrujul</span>
-                                </li>
-                            </ul>
+                                <MDBRow>
+                                    <MDBCol md="12">
+                                        <MDBRow>
+                                            <MDBCol className="text-center mt-4"><h5 className="font-weight"><img className="profile-img" src="https://res-4.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco/zruiknbedz8yqafxbazb" alt="" width="50"></img>Codechef</h5></MDBCol>
+                                        </MDBRow>
+                                        <br/>
+                                        <h5 className="text-info font-weight-bolder">{ userData.ccRating }</h5>
+                                        <h6 className="text-muted">Codechef Rating</h6><hr />
+                                        <h5 className="text-info font-weight-bolder">{ userData.ccRank } <MDBIcon icon="star" /></h5>
+                                        <h6 className="text-muted">Codechef Rank</h6><hr />
+                                        <h5 className="text-danger font-weight-bolder">{ userData.ccMaxRating }</h5>
+                                        <h6 className="text-muted">Highest Rating</h6><hr />
+                                        <h5 className="text-danger font-weight-bolder">{ userData.ccMaxRank } <MDBIcon icon="star" /></h5>
+                                        <h6 className="text-muted">Highest Rank</h6><br /><br />
+                                    </MDBCol>
+                                    <MDBCol className="text-muted" md="12">
+                                        <a href={ userData.cfProfile }>
+                                            <h5 className='text-primary'>See profile
+                                                <MDBIcon icon='chevron-right' className='ml-2' size='sm'></MDBIcon>
+                                            </h5>
+                                        </a> 
+                                    </MDBCol>
+                                </MDBRow>
+                            </MDBCardBody>
+                        </MDBCard>
+                    </MDBCol>}
+                </MDBRow>}{ userData.githubUserName &&  
+                <MDBRow className="mb-5">
+                    <MDBCol>
+                        <MDBCard className="blue-grey lighten-5">
+                            <MDBCardBody className="mx-5">
+                                <MDBRow>
+                                    <MDBCol md="12" className="text-center mb-5 mt-5">
+                                        <h5 className="mb-0"><img className="profile-img" src="https://image.flaticon.com/icons/png/512/25/25231.png" alt="" width="50"></img> Github</h5>
+                                    </MDBCol>
+                                </MDBRow>
+                                {
+                                    userData.githubRepos.map((repo) => {
+                                        return (
+                                            <div key={repo.id}>
+                                                <MDBRow>
+                                                    <MDBCol md="6"><h5 className="text-secondary font-weight-bolder text-center">{ repo.name }</h5></MDBCol>
+                                                    <MDBCol md="6" className="text-center">
+                                                        <a href={`https://github.com/${userData.githubUserName}/${repo.name}`}>
+                                                            <h5 className='text-primary'>See Repo
+                                                                <MDBIcon icon='chevron-right' className='ml-2' size='sm'></MDBIcon>
+                                                            </h5>
+                                                        </a>
+                                                    </MDBCol>
+                                                </MDBRow><hr />
+                                            </div>
+                                        )
+                                    })
+                                }
+                                <MDBCol className="text-muted text-center mt-5" md="12">
+                                        <a href={ userData.githubProfile }>
+                                            <h5 className='text-primary'>See profile
+                                                <MDBIcon icon='chevron-right' className='ml-2' size='sm'></MDBIcon>
+                                            </h5>
+                                        </a> 
+                                </MDBCol>
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>
-                    <MDBCol md="8">
-                        <MDBCard className="text-center">
-                            <MDBCardBody>
-                                <MDBRow>
-                                    <MDBCol sm="3">
-                                        <h6 class="mb-0"><img className="profile-img" src="https://lh3.googleusercontent.com/WsR_f03nbqW3qZjCZeXUYmnmhSWXo3hQhLX9hgl9QHydCgbXQi_VJeAwnmtuIgTHKdQ=s200" alt="" width="50"></img> Codeforces</h6>
-                                    </MDBCol>
-                                    <MDBCol sm="9">
-                                        @HrujulThumar22
-                                    </MDBCol>
-                                </MDBRow>
-                                <hr></hr>
-                                <MDBRow>
-                                    <MDBCol sm="3">
-                                    <h6 class="mb-0"><img className="profile-img" src="https://res-4.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco/zruiknbedz8yqafxbazb" alt="" width="50"></img> Codechef</h6>
-                                    </MDBCol>
-                                    <MDBCol sm="9">
-                                        @HrujulThumar22
-                                    </MDBCol>
-                                </MDBRow>
-                                <hr></hr>
-                                <MDBRow>
-                                    <MDBCol sm="3">
-                                    <h6 class="mb-0"><img className="profile-img" src="https://image.flaticon.com/icons/png/512/25/25231.png" alt="" width="50"></img> Github</h6>
-                                    </MDBCol>
-                                    <MDBCol sm="9">
-                                        @HrujulThumar22
-                                    </MDBCol>
-                                </MDBRow>
-                            </MDBCardBody>
-                        </MDBCard>
-                        <MDBRow className="mt-3">
-                            <MDBCol sm="6">
-                                <MDBCard>
-                                    <MDBCardBody>
-                                        <MDBCardTitle className="mt-3">Skills</MDBCardTitle>
-                                        <MDBCardText>   
-                                            <div>
-                                                C++
-                                            </div>
-                                            <div>
-                                                C
-                                            </div>
-                                            <div>
-                                                Java
-                                            </div>
-                                            <div>
-                                                Javascript
-                                            </div>
-                                            <div>
-                                                Data Structures
-                                            </div>
-                                            <div>
-                                                Algo
-                                            </div>
-                                        </MDBCardText>
-                                    </MDBCardBody>
-                                </MDBCard>
-                            </MDBCol>
-                            <MDBCol sm="6">
-                                <MDBCard>
-                                    <MDBCardBody>
-                                        <MDBCardTitle className="mt-3">Github</MDBCardTitle>
-                                        <MDBCardText>   
-                                            <div>
-                                                C++
-                                            </div>
-                                            <div>
-                                                C
-                                            </div>
-                                            <div>
-                                                Java
-                                            </div>
-                                            <div>
-                                                Javascript
-                                            </div>
-                                            <div>
-                                                Data Structures
-                                            </div>
-                                            <div>
-                                                Algo
-                                            </div>
-                                        </MDBCardText>
-                                    </MDBCardBody>
-                                </MDBCard>
-                            </MDBCol>
-                            <MDBCol sm="12" className="my-3">
-                                <MDBCard>
-                                    <MDBCardBody>
-                                        <MDBCardTitle className="mt-3">Interview Experience</MDBCardTitle>
-                                        <MDBCardText>   
-                                            <div>
-                                                C++
-                                            </div>
-                                            <div>
-                                                C
-                                            </div>
-                                            <div>
-                                                Java
-                                            </div>
-                                            <div>
-                                                Javascript
-                                            </div>
-                                            <div>
-                                                Data Structures
-                                            </div>
-                                            <div>
-                                                Algo
-                                            </div>
-                                        </MDBCardText>
-                                    </MDBCardBody>
-                                </MDBCard>
-                            </MDBCol>
-                        </MDBRow>
-                    </MDBCol>
-                </MDBRow>
+                </MDBRow>}
             </MDBContainer>
-        </Router>
+        </>
     );
 }
 

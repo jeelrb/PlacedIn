@@ -13,7 +13,7 @@ function Dashboard() {
     }, [])
 
     return (
-        <Router>
+        <>
             <Navbar />
             <MDBContainer pt="4" fluid className="dashboard_container">
                 <MDBRow pt="2">
@@ -22,7 +22,7 @@ function Dashboard() {
                     <UserProfile />
                 </MDBRow>
             </MDBContainer>  
-        </Router>
+        </>
     );
 }
 
