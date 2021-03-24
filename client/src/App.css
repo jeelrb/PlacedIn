@@ -291,3 +291,9 @@ a:hover {
     line-height: 1.5em;
     background-color: #455a64;
 }
+
+.input-group.md-form.form-sm.form-1 input {
+  border: 1px solid #bdbdbd;
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}

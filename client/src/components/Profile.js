@@ -36,7 +36,7 @@ function Profile(props){
     })
 
     useEffect(() => {
-        console.log(localStorage.getItem('userData'))
+       
         const fetchUser = async () => {
 
             if(localStorage.getItem('user')){
@@ -106,7 +106,6 @@ function Profile(props){
                 setUserData({ skills: userSkills, name: res.data.userId.name, company, portfolio, twitter, instagram, linkedIn, facebook, college, degree, branch, batch, cfUserName, ccUserName, cfRating, ccRating, cfRank, ccRank, cfMaxRating, ccMaxRating, cfMaxRank, ccMaxRank, cfProfile, ccProfile, githubUserName, githubRepos, githubProfile })
 
                 localStorage.setItem('user', JSON.stringify({ skills: userSkills, name: res.data.userId.name, company, portfolio, twitter, instagram, linkedIn, facebook, college, degree, branch, batch, cfUserName, ccUserName, cfRating, ccRating, cfRank, ccRank, cfMaxRating, ccMaxRating, cfMaxRank, ccMaxRank, cfProfile, ccProfile, githubUserName, githubRepos, githubProfile }))
-                // console.log(userData.githubRepos)
     
             } catch (error) {
                 console.log(error.response.data.msg)
@@ -159,7 +158,7 @@ function Profile(props){
                                     }
                                 </MDBCol>
                             </MDBRow>
-                            <hr class="hr-text" data-content="Education"></hr>
+                            <hr className="hr-text" data-content="Education"></hr>
                             <MDBRow className="mb-4">
                                 <MDBCardBody>
                                     <h6 className="white-text">{ userData.college }</h6>
@@ -167,7 +166,7 @@ function Profile(props){
                                     <h6 className="white-text">Batch - { userData.batch }</h6>
                                 </MDBCardBody>
                             </MDBRow>
-                            <hr class="hr-text" data-content="Skills"></hr>
+                            <hr className="hr-text" data-content="Skills"></hr>
                             <MDBRow className="mb-4">
                                 <MDBCardBody>
                                     <h6 className="white-text">
@@ -227,7 +226,7 @@ function Profile(props){
                                         <h6 className="text-muted">Highest Rank</h6><br /><br />
                                     </MDBCol>
                                     <MDBCol className="text-muted" md="12">
-                                        <a href={ userData.cfProfile }>
+                                        <a href={ userData.ccProfile }>
                                             <h5 className='text-primary'>See profile
                                                 <MDBIcon icon='chevron-right' className='ml-2' size='sm'></MDBIcon>
                                             </h5>

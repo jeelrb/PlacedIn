@@ -3,7 +3,7 @@ import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNav
 MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon, MDBBtn } from "mdbreact";
 import { BrowserRouter as Router, Redirect, Link } from 'react-router-dom';
 
-function Navbar() {
+function Navbar(props) {
 
     const [ isOpen, setState ] = useState(false)
 
@@ -28,7 +28,7 @@ function Navbar() {
                     <MDBNavLink className="navbar_item" to="/dashboard">Home</MDBNavLink>
                     </MDBNavItem>
                     <MDBNavItem>
-                    <MDBNavLink className="navbar_item" to="/dashboard/profiles">Colleagues</MDBNavLink>
+                    <MDBNavLink className="navbar_item" to="/dashboard/profiles" onClick={props.onReload}>Colleagues</MDBNavLink>
                     </MDBNavItem>
                     <MDBNavItem>
                     <MDBNavLink className="navbar_item" to="#!">Interview Experiences</MDBNavLink>

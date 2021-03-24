@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
-import Searchbar from './Searchbar'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { MDBCard,MDBCardHeader, MDBCardBody, MDBCardTitle, MDBRow, MDBCol, MDBIcon, MDBContainer} from 'mdbreact';
+
 
 const ColleagueProfile = (props) => {
 
@@ -11,7 +11,7 @@ const ColleagueProfile = (props) => {
 
         <MDBContainer>
             <MDBCard className="mb-3">
-                <MDBCardHeader className="cyan darken-4">
+                <MDBCardHeader className=" teal lighten-2">
                     <MDBCardTitle className="text-white font-weight-bold mt-3"><img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" className="rounded-circle white mr-3" width="60"></img>        { props.details.name }</MDBCardTitle>
                 </MDBCardHeader>
                 <MDBCardBody className="grey lighten-4">
@@ -65,7 +65,12 @@ function Colleague(){
         }
     ])
 
+    const [ suggestions, setSuggestions ] = useState([])
+
+    const [ searchField, setSearchField ] = useState('')
+
     useEffect(() => {
+
 
         if(localStorage.getItem('user')) {
             localStorage.removeItem('user')
@@ -88,6 +93,7 @@ function Colleague(){
                             return { instagram: user.instagram, twitter: user.twitter, facebook: user.facebook, linkedIn: user.linkedIn, company: user.company, name: user.userId.name, username: user.userId.username, userId: user.userId._id }
                         })
                         setProfiles(users)
+                        setSuggestions(users)
                     })
                     .catch((err) => {
                         console.log(err)
@@ -101,16 +107,66 @@ function Colleague(){
 
         fetchAllUsers()
 
-
     }, [])
+
+    const findFilteredUsers = (e) => {
+        
+        setSearchField(e.target.value)
+
+        if(e.target.value.length===0) {
+        
+            setSuggestions(profiles)
+
+        } else {
+
+            const regex = new RegExp(`^${searchField}`,'i')
+            const names = profiles.map((user) => user.name)
+            const suggestions = names.sort().filter(name => regex.test(name))
+
+            let filteredProfiles = []
+            for(let i=0;i<suggestions.length;i++){
+                for(let j=0;j<profiles.length;j++){
+                    if(suggestions[i]===profiles[j].name){
+                        filteredProfiles.push(profiles[j]);
+                        break;
+                    }
+                }
+            }
+
+            if(filteredProfiles.length===0){
+                filteredProfiles = []
+            }
+            setSuggestions(filteredProfiles)
+
+        }
+    }
+
+    const onReload = () => {
+        window.location.reload()
+    }
 
     return (
         <>
-            <Navbar />
-            <Searchbar />
+            <Navbar onReload={onReload}/>
             <MDBContainer className="mt-5">
+                <MDBRow className="mb-5">
+                    <MDBCol md="12">
+                        <div className="input-group md-form form-sm form-1 pl-0 mt-5">
+                            <input className="form-control my-0 py-1" type="text" placeholder="Search User" 
+                                value={searchField}
+                                onChange={e => findFilteredUsers(e)}
+                            />
+                            <div className="input-group-prepend">
+                            
+                            </div>
+                        </div>
+                    </MDBCol>
+                </MDBRow>
                 <MDBRow>
-                    { profiles.map((profile, index) => { 
+                {
+                    
+                }
+                    { suggestions.map((profile, index) => { 
                         return <ColleagueProfile key={index} details={{ 
                             name: profile.name || '',
                             username: profile.username || '',
