@@ -15,7 +15,8 @@ const ExperienceSchema = mongoose.Schema({
                 type: String,
                 required:true,
             },
-            questions: [],
+            programmingTopics: [],
+            csFundamentals: [],
             text: String
         }
 })

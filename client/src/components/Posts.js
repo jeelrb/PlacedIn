@@ -1,23 +1,22 @@
 import React from "react";
-import {MDBContainer, MDBBtn,  MDBRow, MDBCol } from "mdbreact";
+import PostItem from './PostItem'
+import AddComment from '@material-ui/icons/AddCommentRounded';
+import Like from '@material-ui/icons/ThumbUpAltOutlined';
+import { MDBCard,MDBCardHeader, MDBCardBody, MDBCardTitle, MDBBtn, MDBRow, MDBCol, MDBIcon, MDBContainer, MDBCardFooter} from 'mdbreact';
+
+
 
 function Post() {
+
     return(
-        <MDBCol className="post pr-3 pb-4" lg="7">
-            <MDBContainer fluid className="post_container">
-                <MDBRow>
-                    <MDBCol md="6">
-                        <MDBBtn className="post_button" href="#" color="default" size="lg">
-                            Add Post
-                        </MDBBtn>
-                    </MDBCol>
-                    <MDBCol md="6">
-                        <MDBBtn className="post_button" href="#" color="default" size="lg">
-                            Add Interview Experience
-                        </MDBBtn>
-                    </MDBCol>
-                </MDBRow>
-            </MDBContainer>
+        <MDBCol className="post pr-2 pb-4 mt-5" lg="7">
+            <PostItem />
+            <PostItem />
+            <PostItem />
+            <PostItem />
+            <PostItem />
+            <PostItem />
+            <PostItem />
         </MDBCol>
     )
 }

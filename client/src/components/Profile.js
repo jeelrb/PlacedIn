@@ -36,7 +36,7 @@ function Profile(props){
     })
 
     useEffect(() => {
-       
+        
         const fetchUser = async () => {
 
             if(localStorage.getItem('user')){

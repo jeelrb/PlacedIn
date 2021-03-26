@@ -31,29 +31,33 @@ router.get('/my',auth,async (req,res)=>{
 //to add new interview experiences
 router.post('/add',[
     auth,
-    check('company', 'Company is required').not().isEmpty(),
-    check('role', 'Role is required').not().isEmpty(),
+    [
+        check('company', 'Company is required').not().isEmpty(),
+        check('role', 'Role is required').not().isEmpty(),
+    ]
 ],
-async (req,res)=>{
+async (req, res) => {
+
     const errors = validationResult(req)
     if(!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() })
     }
 
-    let loggedUser = await User.findOne({_id:req.user.id });
+    let loggedUser = await User.findOne({ _id: req.user.id });
     if(!loggedUser) {
         return res.status(400).json({ error: 'Please try loging in again' })
     }
 
-    const {company,role,questions,text} = req.body;
+    const {company,role,programmingTopics,csFundamentals,text} = req.body;
 
-    const newInterviewExp=new Interviewexp({
-        userId:req.user.id,
-        experience:{
-            company:company,
-            role:role,
-            questions:(questions?questions:[]),
-            text:text,
+    const newInterviewExp = new Interviewexp({
+        userId: req.user.id,
+        experience: {
+            company,
+            role,
+            programmingTopics,
+            csFundamentals,
+            text
         },
     });
     
