@@ -1,6 +1,7 @@
 import React from "react";
 import PostItem from './PostItem'
 import AddComment from '@material-ui/icons/AddCommentRounded';
+import AddIcon from '@material-ui/icons/AddCircle';
 import Like from '@material-ui/icons/ThumbUpAltOutlined';
 import { MDBCard,MDBCardHeader, MDBCardBody, MDBCardTitle, MDBBtn, MDBRow, MDBCol, MDBIcon, MDBContainer, MDBCardFooter} from 'mdbreact';
 
@@ -10,6 +11,7 @@ function Post() {
 
     return(
         <MDBCol className="post pr-2 pb-4 mt-5" lg="7">
+            <AddIcon className="mx-5" style={{ fontSize: "50" }}/>
             <PostItem />
             <PostItem />
             <PostItem />

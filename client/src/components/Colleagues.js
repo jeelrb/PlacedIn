@@ -12,7 +12,7 @@ const ColleagueProfile = (props) => {
         <MDBContainer>
             <MDBCard className="mb-3">
                 <MDBCardHeader className=" teal lighten-2">
-                    <MDBCardTitle className="text-white font-weight-bold mt-3"><img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" className="rounded-circle white mr-3" width="60"></img>        { props.details.name }</MDBCardTitle>
+                    <MDBCardTitle className="text-white font-weight-bold mt-3"><img src={`/images/${props.details.avatar}`} alt="Admin" className="rounded-circle white mr-3" width="60"></img>        { props.details.name }</MDBCardTitle>
                 </MDBCardHeader>
                 <MDBCardBody className="grey lighten-4">
                     <MDBRow>
@@ -52,6 +52,7 @@ function Colleague(){
     const [ profiles, setProfiles ] = useState([
         {
             name: '',
+            avatar: '',
             username: '',
             instagram: '',
             facebook: '',
@@ -90,7 +91,7 @@ function Colleague(){
                 axios.get('http://localhost:5000/profile', config)
                     .then((res) => {
                         const users = res.data.map((user) => {
-                            return { instagram: user.instagram, twitter: user.twitter, facebook: user.facebook, linkedIn: user.linkedIn, company: user.company, name: user.userId.name, username: user.userId.username, userId: user.userId._id }
+                            return { instagram: user.instagram, twitter: user.twitter, facebook: user.facebook, linkedIn: user.linkedIn, avatar: user.avatar, company: user.company, name: user.userId.name, username: user.userId.username, userId: user.userId._id }
                         })
                         setProfiles(users)
                         setSuggestions(users)
@@ -148,7 +149,7 @@ function Colleague(){
     return (
         <>
             <Navbar onReload={onReload}/>
-            <MDBContainer className="mt-5">
+            <MDBContainer>
                 <MDBRow className="mb-5">
                     <MDBCol md="12">
                         <div className="input-group md-form form-sm form-1 pl-0 mt-5">
@@ -169,6 +170,7 @@ function Colleague(){
                     { suggestions.map((profile, index) => { 
                         return <ColleagueProfile key={index} details={{ 
                             name: profile.name || '',
+                            avatar: profile.avatar || '',
                             username: profile.username || '',
                             linkedIn: profile.linkedIn || '',
                             instagram: profile.instagram || '',

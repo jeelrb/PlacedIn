@@ -18,7 +18,30 @@ const ExperienceSchema = mongoose.Schema({
             programmingTopics: [],
             csFundamentals: [],
             text: String
-        }
+        },
+        name: String,
+        avatar: String,
+        comments: [
+            {
+                userId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'User'
+                },
+                text: {
+                    type: String,
+                    required: true
+                },
+                name: String,
+            }
+        ],
+        likes: [
+            {
+                userId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'User'
+                } 
+            }
+        ]
 })
 
 const Experience = mongoose.model('Experience', ExperienceSchema)

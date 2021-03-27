@@ -43,12 +43,12 @@ async (req, res) => {
         return res.status(400).json({ error: errors.array() })
     }
 
-    let loggedUser = await User.findOne({ _id: req.user.id });
+    let loggedUser = await (await User.findOne({ _id: req.user.id })).select('-password');
     if(!loggedUser) {
         return res.status(400).json({ error: 'Please try loging in again' })
     }
 
-    const {company,role,programmingTopics,csFundamentals,text} = req.body;
+    const { company, role, programmingTopics, csFundamentals, text } = req.body;
 
     const newInterviewExp = new Interviewexp({
         userId: req.user.id,
@@ -67,9 +67,11 @@ async (req, res) => {
 
 //to update particular experience of the user
 router.post('/my/:id',[
-    auth,
-    check('company', 'Company is required').not().isEmpty(),
-    check('role', 'Role is required').not().isEmpty(),
+    auth, 
+    [
+        check('company', 'Company is required').not().isEmpty(),
+        check('role', 'Role is required').not().isEmpty(),
+    ]
 ],
 async (req,res)=>{
     const errors = validationResult(req)

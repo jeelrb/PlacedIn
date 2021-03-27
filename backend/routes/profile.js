@@ -1,4 +1,7 @@
 const express = require('express')
+const multer = require('multer')
+const { v4: uuidv4 } = require('uuid');
+let path = require('path');
 const User = require('../models/User')
 const Profile = require('../models/Profile')
 const { check, validationResult } = require('express-validator')
@@ -6,12 +9,32 @@ const auth = require('../middleware/auth')
 
 const router = express.Router()
 
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './client/public/images');
+    },
+    filename: function(req, file, cb) {   
+        cb(null, uuidv4() + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if(allowedFileTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+}
+
+let upload = multer({ storage, fileFilter });
+
 //Create / Update profile route
-router.post('/', [ auth, [
+router.post('/', [ auth, upload.single('avatar'), [
 
     check('skills','Enter your skills').not().isEmpty()
 
-]], async (req, res) => {
+] ], async (req, res) => {
     
     const errors = validationResult(req)
     if(!errors.isEmpty()){
@@ -26,36 +49,29 @@ router.post('/', [ auth, [
         instagram,
         facebook,
         twitter,
-
+        cfUserName, 
+        ccUserName,
+        githubUserName
     } = req.body
+
+    const avatar = req.file.filename
 
     const profileFields = {}
 
     profileFields.userId = req.user.id
+    if(avatar)profileFields.avatar = avatar
     if(company)profileFields.company = company
     if(portfolio)profileFields.portfolio = portfolio
     if(linkedIn)profileFields.linkedIn = linkedIn
     if(instagram)profileFields.instagram = instagram
     if(facebook)profileFields.facebook = facebook
     if(twitter)profileFields.twitter = twitter
+    if(cfUserName)profileFields.cfUserName = cfUserName
+    if(ccUserName)profileFields.ccUserName = ccUserName
+    if(githubUserName)profileFields.githubUserName = githubUserName
     if(skills){
         profileFields.skills = skills.split(',').map((skill) => skill.trim())
     }
-    /*profileFields.codeforcesProfile = {
-        cfMaxRank: '',
-        cfMaxRating: '',
-        cfProfile: '',
-        cfRank: '',
-        cfRating: '',
-        cfUserName: ''
-    }
-    profileFields.codechefProfile = {
-        ccProfile: '',
-        ccRating: '',
-        ccStars: '',
-        ccMaxRating: '',
-        ccUserName: ''
-    }*/
     try {
 
         let profile = await Profile.findOne({ userId: req.user.id })

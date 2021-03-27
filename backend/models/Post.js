@@ -26,7 +26,6 @@ const PostSchema = new mongoose.Schema({
                 required: true
             },
             name: String,
-            avatar: String,
         }
     ],
     likes: [

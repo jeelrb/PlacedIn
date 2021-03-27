@@ -7,29 +7,14 @@ const userProfile = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    avatar: String,
     skills: {
         type: [ String ],
         required: true
     },
-    codeforcesProfile: {
-        cfUserName: String,
-        cfRating: Number,
-        cfMaxRating: Number,
-        cfRank: String,
-        cfMaxRank: String,
-        cfProfile: String
-    },
-    codechefProfile: {
-        ccUserName: String,
-        ccRating: Number,
-        ccMaxRating: Number,
-        ccStars: String,
-        ccProfile: String
-    },
-    github: {
-        githubUserName: String,
-        githubRepos: [],
-    },
+    cfUserName: String,
+    ccUserName: String,
+    githubUserName: String,
     portfolio: String,
     company: String,
     linkedIn: String,

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBDropdown,
-MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon, MDBBtn } from "mdbreact";
-import { BrowserRouter as Router, Redirect, Link } from 'react-router-dom';
+MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon } from "mdbreact";
 
 function Navbar(props) {
 
@@ -9,10 +8,6 @@ function Navbar(props) {
 
     const toggleCollapse = () => {
         setState(!isOpen)
-    }
-
-    const handleLogout = () => {
-        localStorage.removeItem('token')
     }
 
     return(

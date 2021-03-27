@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import Navbar from './Navbar';
 import DisplayError from './DisplayError'
-import { BrowserRouter as Router, Redirect, useHistory } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -14,6 +14,7 @@ function AddProfile(){
         skills: '',
         company: '',
         portfolio: '',
+        avatar: '',
         linkedIn: '',
         instagram: '',
         facebook: '',
@@ -38,8 +39,6 @@ function AddProfile(){
         batchError: ''
     })
 
-    const history = useHistory()
-
     // Useeffect ( Behaves as => ComponentDidMount ) to fetch data if user has added profile already and wants to edit
     useEffect(() => {
 
@@ -56,14 +55,10 @@ function AddProfile(){
 
                 //Sending get request to mentioned route
                 const userProfile = await axios.get('http://localhost:5000/profile/me', config)
-
+                
                 //Destructuring the object returned from the get request
-                const { codeforcesProfile, codechefProfile, education, github, skills, company, portfolio,
-                linkedIn, instagram, facebook, twitter } = userProfile.data
-                let cfUserName, ccUserName, githubUserName
-                if(codeforcesProfile) cfUserName = codeforcesProfile.cfUserName
-                if(codechefProfile) ccUserName  = codechefProfile.ccUserName 
-                if(github) githubUserName = github.githubUserName
+                const { education, skills, company, portfolio,
+                linkedIn, instagram, facebook, twitter, cfUserName, ccUserName, githubUserName } = userProfile.data
                 const { college, branch, batch, degree } = education[0]
                 
                 //Skills is an array in database...so converting it to string to display in appropriate form
@@ -97,10 +92,8 @@ function AddProfile(){
 
         e.preventDefault()
 
-        console.log(profile)
-
-        let cfUserNameError='', ccUserNameError='', githubUserNameError='', batchError=''
-        let res1, res2, res3, res4, res5;
+        let cfUserNameError='', ccUserNameError='', githubUserNameError=''
+        let res1, res2, res3, res5;
 
         //Sending get requests to third party api for getting cf, cc and github profiles of the user
         toast.info('Please wait', {
@@ -135,43 +128,27 @@ function AddProfile(){
         }
         
         //Destructuring the profile state to include these fields as body in post requests
-        const { portfolio, linkedIn, facebook, instagram, twitter, skills, company } = profile
+        const { portfolio, linkedIn, facebook, instagram, twitter, skills, company, avatar, cfUserName, ccUserName, githubUserName } = profile
         const { college, branch, batch, degree } = profile
 
         //Body of the post request 
-        const profileInfo = { portfolio, linkedIn, facebook, instagram, twitter, skills, company }
+        const profileInfo = { portfolio, linkedIn, facebook, instagram, twitter, skills, company, avatar, cfUserName, ccUserName, githubUserName }
+        
+        const formData = new FormData()
+        formData.append('portfolio',profileInfo.portfolio || '')
+        formData.append('linkedIn',profileInfo.linkedIn || '')
+        formData.append('facebook',profileInfo.facebook || '')
+        formData.append('instagram',profileInfo.instagram || '')
+        formData.append('twitter',profileInfo.twitter || '') 
+        formData.append('skills',profileInfo.skills || '')
+        formData.append('company',profileInfo.company || '')
+        formData.append('avatar',profileInfo.avatar || '')
+        formData.append('cfUserName',profileInfo.cfUserName || '')
+        formData.append('ccUserName',profileInfo.ccUserName || '')
+        formData.append('githubUserName',profileInfo.githubUserName || '')
 
         const eduInfo = { college, branch, batch, degree }
 
-        let cfInfo, ccInfo, githubInfo
-
-        if(profile.cfUserName) {
-            cfInfo = {
-                cfUserName: profile.cfUserName,
-                cfRating: res1.data.rating,
-                cfMaxRating: res1['data']['max rating'],
-                cfRank: res1.data.rank, 
-                cfMaxRank: res1['data']['max rank'],
-                cfProfile: `https://codeforces.com/profile/${profile.cfUserName}`,
-            }
-        }
-
-        if(profile.ccUserName) {
-            ccInfo = {
-                ccUserName: profile.ccUserName,
-                ccRating: res2.data.rating,
-                ccMaxRating: res2.data.highest_rating,
-                ccStars: res2.data.stars,
-                ccProfile: `https://www.codechef.com/users/${profile.ccUserName}`,
-            }
-        }
-
-        if(profile.githubUserName) {
-            githubInfo = {
-                githubUserName: profile.githubUserName,
-                githubRepos: res3.data
-            }
-        }
 
         try {
             const config = {
@@ -181,11 +158,9 @@ function AddProfile(){
                 }
             }
 
+            
             //Sending post requests to our REST api to store / update user profile
-            res1 = await axios.post('http://localhost:5000/profile', profileInfo, config)
-            if(profile.cfUserName)res2 = await axios.put('http://localhost:5000/profile/codeforcesProfile', cfInfo, config)
-            if(profile.ccUserName)res3 = await axios.put('http://localhost:5000/profile/codechefProfile', ccInfo, config)
-            if(profile.githubUserName)res4 = await axios.put('http://localhost:5000/profile/githubProfile', githubInfo, config)
+            res1 = await axios.post('http://localhost:5000/profile', formData, config)
             res5 = await axios.put('http://localhost:5000/profile/education', eduInfo, config)
 
             //If no error occured then change isSubmit to true
@@ -197,7 +172,7 @@ function AddProfile(){
              })
 
         } catch (error) {
-            console.log(error.response)
+            console.log(error.response.data)
         }
         
     }
@@ -220,7 +195,7 @@ function AddProfile(){
                         </div>
                     </div>
                 <div className="card-body">
-                <form className="needs-validation" onSubmit={ e => onSubmit(e) } >
+                <form className="needs-validation" onSubmit={ e => onSubmit(e) } encType='multipart/form-data'>
                 <h6 className="heading-small text-muted mb-4">Education and Profesional Details</h6>
                     <div className="pl-lg-4">
                         <div className="row">
@@ -310,6 +285,18 @@ function AddProfile(){
                     <h6 className="heading-small text-muted mb-4">Social information</h6>
                     <div className="pl-lg-4">
                         <div className="row">
+                            <div className="col-lg-12 mb-3">
+                            <div className="form-group focused">
+                                <label className="form-control-label mr-3" htmlFor="input-profile-photo">Upload profile photo</label>
+                                <input 
+                                    type="file" 
+                                    accept=".png, .jpg, .jpeg"
+                                    name="photo"
+                                    className="form-control-file"
+                                    onChange={ e => setProfile({...profile, avatar: e.target.files[0] }) }
+                                />
+                            </div>
+                            </div>
                             <div className="col-lg-12">
                                 <div className="form-group focused">
                                     <label className="form-control-label" htmlFor="input-website">Portfolio Website</label>

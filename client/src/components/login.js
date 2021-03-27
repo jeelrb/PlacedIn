@@ -59,6 +59,9 @@ function Login({ onAuthenticated }) {
         if(localStorage.getItem('token')){
             localStorage.removeItem('token') 
         }
+        if(localStorage.getItem('user')){
+            localStorage.removeItem('user')
+        }
         return  () => {
             setIsLoading(!isLoading)
         }

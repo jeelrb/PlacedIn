@@ -9,7 +9,10 @@ import { BrowserRouter as Router } from 'react-router-dom';
 function Dashboard() {
 
     useEffect(() => {
-        window.scrollTo(0, 0);    
+        window.scrollTo(0, 0);   
+        if(localStorage.getItem('user')){
+            localStorage.removeItem('user')
+        }
     }, [])
 
     return (
