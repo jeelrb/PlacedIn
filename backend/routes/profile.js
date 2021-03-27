@@ -54,7 +54,12 @@ router.post('/', [ auth, upload.single('avatar'), [
         githubUserName
     } = req.body
 
-    const avatar = req.file.filename
+    let avatar
+    if(req.file) {
+        avatar = req.file.filename
+    }else if(req.body.avatar){
+        avatar = req.body.avatar
+    }
 
     const profileFields = {}
 

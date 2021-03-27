@@ -58,9 +58,10 @@ function AddProfile(){
                 
                 //Destructuring the object returned from the get request
                 const { education, skills, company, portfolio,
-                linkedIn, instagram, facebook, twitter, cfUserName, ccUserName, githubUserName } = userProfile.data
+                linkedIn, instagram, facebook, twitter, cfUserName, ccUserName, githubUserName, avatar } = userProfile.data
                 const { college, branch, batch, degree } = education[0]
                 
+                console.log(avatar)
                 //Skills is an array in database...so converting it to string to display in appropriate form
                 const res = skills.toString()
                 let userSkills=''
@@ -74,7 +75,7 @@ function AddProfile(){
 
                 //Updating the state with the values received from get request
                 setProfile({ skills: userSkills, company, portfolio, linkedIn, instagram, twitter, facebook, 
-                college, degree, branch, batch, cfUserName, ccUserName, githubUserName  })
+                college, degree, branch, batch, cfUserName, ccUserName, githubUserName, avatar  })
 
             } catch (error) {
                 console.log(error)
