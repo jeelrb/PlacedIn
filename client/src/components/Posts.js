@@ -1,24 +1,129 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PostItem from './PostItem'
-import AddComment from '@material-ui/icons/AddCommentRounded';
+import axios from 'axios'
 import AddIcon from '@material-ui/icons/AddCircle';
-import Like from '@material-ui/icons/ThumbUpAltOutlined';
-import { MDBCard,MDBCardHeader, MDBCardBody, MDBCardTitle, MDBBtn, MDBRow, MDBCol, MDBIcon, MDBContainer, MDBCardFooter} from 'mdbreact';
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import { MDBCol, MDBCard, MDBIcon } from 'mdbreact';
 
 
 
 function Post() {
 
+    const [ posts, setPosts ] = useState([])
+    const [ suggestions, setSuggestions ] = useState([])
+    const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+
+    setValue(newValue);
+
+    if(newValue===0) {
+
+        setSuggestions(posts)
+
+    } else if(newValue===1) {
+
+        const temp = posts.filter((post) => {
+            if(!post.experience) {
+                return post
+            }
+        })
+
+        setSuggestions(temp)
+
+    } else if(newValue===2) {
+
+        const temp = posts.filter((post) => {
+            if(post.experience) {
+                return post
+            }
+        })
+
+        setSuggestions(temp)
+
+    }
+
+  };
+
+    useEffect(() => {
+
+        const fetchPosts = async () => {
+
+            try {
+
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'auth-token': localStorage.getItem('token')
+                    }
+                }
+
+                const res1 = await axios.get('http://localhost:5000/interview', config)
+                const res2 = await axios.get('http://localhost:5000/post', config)
+                
+                let posts = res1.data
+                posts.unshift(...res2.data)
+                // console.log(posts)
+                posts.sort((post1, post2) => {
+                    let x = new Date(post1.createdAt)
+                    let y = new Date(post2.createdAt)
+                    if(x<y) return 1
+                    if(x>=y) return -1
+                    return 0
+                })
+                // console.log(posts.data.profileId.avatar)
+                setPosts(posts)
+                // setSuggestions(posts)
+
+            } catch (error) {
+
+                console.log(error.response)
+
+            }
+
+        }
+
+        fetchPosts()
+        // console.log(posts.data.profileId.avatar)
+
+    }, [ suggestions])
+
     return(
-        <MDBCol className="post pr-2 pb-4 mt-5" lg="7">
-            <AddIcon className="mx-5" style={{ fontSize: "50" }}/>
+        <MDBCol className="post pb-4 mt-5" xl="8">
+            <MDBCard className="mx-5">
+            <Paper className="mdb-color lighten-5">
+            <Tabs
+                value={value}
+                onChange={handleChange}
+                indicatorColor="primary"
+                textColor="primary"
+                centered
+            >
+                <Tab label="All"  />
+                <Tab label="Posts" icon={<MDBIcon icon="pen"/>}/>
+                <Tab label="Interview Experiences" icon={<MDBIcon icon="chalkboard-teacher"/>}/>
+            </Tabs>
+            </Paper>
+            </MDBCard>
+            {
+                suggestions.length!==0 ? 
+                suggestions.map((post) => {
+                    return <PostItem  key={post._id} data={post} />
+                }) : 
+                posts.map((post) => {
+                    return <PostItem  key={post._id} data={post} />
+                })
+
+            }
+            {/* <PostItem />
             <PostItem />
             <PostItem />
             <PostItem />
             <PostItem />
             <PostItem />
-            <PostItem />
-            <PostItem />
+            <PostItem /> */}
         </MDBCol>
     )
 }

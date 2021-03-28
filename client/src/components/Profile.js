@@ -146,7 +146,7 @@ function Profile(props){
             { isLoading ?  <LinearProgress /> : <MDBContainer mt="4" className="mt-4 details_container">
                 <MDBRow className="mt-4">
                     <MDBCol md="12">   
-                        <MDBCard className="card_container text-center  blue-grey darken-2">
+                        <MDBCard className="card_container text-center  mdb-color darken-1">
                             <MDBRow className="mb-4">
                                 <MDBCol>
                                     <MDBCardBody className="mt-5">

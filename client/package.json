@@ -12,6 +12,7 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.3",
     "bootstrap": "^4.6.0",
+    "html-react-parser": "^1.2.4",
     "install": "^0.13.0",
     "mdbreact": "^5.0.1",
     "multiselect-react-dropdown": "^1.6.11",

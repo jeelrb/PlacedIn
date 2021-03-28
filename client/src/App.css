@@ -289,7 +289,7 @@ a:hover {
     color: white;
     padding: 0 .5em;
     line-height: 1.5em;
-    background-color: #455a64;
+    background-color: #3b465e;
 }
 
 .hr-text-form {
@@ -338,7 +338,7 @@ option {
 }
 
 .profile_container {
-  border-radius: 50px;
+  border-radius: 30px !important;
 }
 
 .likeNComment:hover {
@@ -353,3 +353,10 @@ option {
   border: none !important; 
   border-radius: 40px !important;
 }
+
+.chips_logo:hover {
+  background-color:  black !important;
+  color: white !important
+}
+
+

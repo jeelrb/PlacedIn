@@ -3,7 +3,7 @@ import Navbar from './Navbar'
 import Sidebar from './Sidebar'
 import Posts from './Posts'
 import UserProfile from './UserProfile'
-import { MDBContainer, MDBRow } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import { BrowserRouter as Router } from 'react-router-dom';
 
 function Dashboard() {
@@ -20,9 +20,11 @@ function Dashboard() {
             <Navbar />
             <MDBContainer pt="4" fluid className="dashboard_container">
                 <MDBRow pt="2">
-                    <Sidebar />
+                    {/* <Sidebar /> */}
+                    {/* <MDBCol lg="1"></MDBCol> */}
                     <Posts />
                     <UserProfile />
+                    {/* <MDBCol lg="1"></MDBCol> */}
                 </MDBRow>
             </MDBContainer>  
         </>

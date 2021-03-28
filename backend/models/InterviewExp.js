@@ -19,8 +19,10 @@ const ExperienceSchema = mongoose.Schema({
             csFundamentals: [],
             text: String
         },
-        name: String,
-        avatar: String,
+        profileId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Profile'
+        },
         comments: [
             {
                 userId: {
@@ -42,6 +44,8 @@ const ExperienceSchema = mongoose.Schema({
                 } 
             }
         ]
+},{
+    timestamps:true
 })
 
 const Experience = mongoose.model('Experience', ExperienceSchema)

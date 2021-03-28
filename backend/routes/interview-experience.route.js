@@ -1,15 +1,15 @@
 const router=require('express').Router();
 const auth=require('../middleware/auth');
-const Interviewexp=require('../models/InterviewExp');
+const Interviewexp = require('../models/InterviewExp');
 const User=require('../models/User');
+const Profile = require('../models/Profile')
 const { check, validationResult } = require('express-validator');
 
 //to show all the interview experiences
-router.get('/',auth,async (req,res)=>{
-    const interviewExp=await Interviewexp.find();
-    if(!interviewExp)
-    {
-        res.json('Currently No Experiences are available');
+router.get('/', auth, async (req, res)=>{
+    const interviewExp = await Interviewexp.find().populate('profileId', ['avatar']).populate('userId',['name'])
+    if(!interviewExp){
+        res.json({msg: 'Currently No Experiences are available'});
     }
     else{
         res.json(interviewExp);
@@ -43,10 +43,12 @@ async (req, res) => {
         return res.status(400).json({ error: errors.array() })
     }
 
-    let loggedUser = await (await User.findOne({ _id: req.user.id })).select('-password');
+    let loggedUser = await User.findOne({ _id: req.user.id }).select('-password')
     if(!loggedUser) {
         return res.status(400).json({ error: 'Please try loging in again' })
     }
+
+    let profile = await Profile.findOne({userId: req.user.id})
 
     const { company, role, programmingTopics, csFundamentals, text } = req.body;
 
@@ -59,6 +61,7 @@ async (req, res) => {
             csFundamentals,
             text
         },
+        profileId: profile._id
     });
     
     await newInterviewExp.save();

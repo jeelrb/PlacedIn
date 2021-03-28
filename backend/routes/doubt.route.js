@@ -2,13 +2,17 @@ const router=require('express').Router();
 const auth=require('../middleware/auth');
 const Post=require('../models/Post');
 const User=require('../models/User');
+const Profile = require('../models/Profile')
 const { check, validationResult } = require('express-validator');
 
 //to show all the posts
 router.get('/', auth, async (req, res) => {
 
     try{
-        const posts = await Post.find()
+        const posts = await Post.find().populate('profileId',['avatar']).populate('userId',['name'])
+        if(!posts){
+            res.json({msg: 'No posts!!'});
+        }
         res.json(posts)
     } catch (error) {
         console.log(error.message)
@@ -42,12 +46,14 @@ async (req,res)=>{
     if(!loggedUser) {
         return res.status(400).json({ error: 'Please try loging in again' })
     }
-    
+
+    let profile = await Profile.findOne({userId: req.user.id})
+
     const {text,title} = req.body;
 
-    const newPost=new Post({
+    const newPost = new Post({
         userId:req.user.id,
-        name:loggedUser.username,
+        profileId: profile._id,
         text:text,
         title:title,
     });

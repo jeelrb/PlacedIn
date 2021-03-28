@@ -1,10 +1,17 @@
 import React, { useState } from "react";
+import Tooltip from '@material-ui/core/Tooltip';
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBDropdown,
 MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon } from "mdbreact";
 
 function Navbar(props) {
 
     const [ isOpen, setState ] = useState(false)
+    const [ select, setSelect ] = useState({
+        home: true,
+        colleagues: false,
+        interview: false,
+    })
+
 
     const toggleCollapse = () => {
         setState(!isOpen)
@@ -19,19 +26,19 @@ function Navbar(props) {
             <MDBNavbarToggler onClick={toggleCollapse} />
             <MDBCollapse id="navbarCollapse3" isOpen={isOpen} navbar>
                 <MDBNavbarNav left>
-                    <MDBNavItem active>
-                    <MDBNavLink className="navbar_item" to="/dashboard">Home</MDBNavLink>
+                    <MDBNavItem active={window.location.pathname==='/dashboard'}>
+                    <MDBNavLink className="navbar_item" to="/dashboard" >Home</MDBNavLink>
                     </MDBNavItem>
-                    <MDBNavItem>
-                    <MDBNavLink className="navbar_item" to="/dashboard/profiles" onClick={props.onReload}>Colleagues</MDBNavLink>
+                    <MDBNavItem active={window.location.pathname==='/dashboard/profiles'}>
+                    <MDBNavLink className="navbar_item" to="/dashboard/profiles" >Colleagues</MDBNavLink>
                     </MDBNavItem>
-                    <MDBNavItem>
-                    <MDBNavLink className="navbar_item" to="#!">Interview Experiences</MDBNavLink>
+                    <MDBNavItem active={select.interview}>
+                    <MDBNavLink className="navbar_item" to="#!" >Interview Experiences</MDBNavLink>
                     </MDBNavItem>
                 </MDBNavbarNav>
                 <MDBNavbarNav right className="pr-5">
                     <MDBNavItem>
-                        <MDBDropdown dropleft>
+                        {/* <MDBDropdown dropleft>
                             <MDBDropdownToggle nav caret>
                             <MDBIcon icon="user" />
                             </MDBDropdownToggle>
@@ -42,7 +49,9 @@ function Navbar(props) {
                                 <MDBDropdownItem divider/>
                                 <MDBDropdownItem href='/'>Logout</MDBDropdownItem>
                             </MDBDropdownMenu>
-                        </MDBDropdown>
+                        </MDBDropdown> */}
+                        
+                        <Tooltip title="logout"><a href="/"><MDBIcon icon="sign-out-alt" className="text-white" size="2x"/></a></Tooltip>
                     </MDBNavItem>
                 </MDBNavbarNav>
             </MDBCollapse>
