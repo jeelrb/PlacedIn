@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from './Navbar'
 import axios from 'axios'
 import { Redirect } from 'react-router-dom';
@@ -8,7 +8,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
-function AddPost(){
+function AddPost(props){
 
     const [ formData, setFormData ] = useState({
         title: '',
@@ -16,6 +16,18 @@ function AddPost(){
     })
 
     const [ isSubmitted, setIsSubmited ] = useState(false)
+
+    useEffect(() => {
+
+        if(props.location.postId) {
+            console.log(props.location)
+            // fetchPost(props.location.postId)
+            setFormData({ title: props.location.title, text: props.location.text })
+        }
+
+        // console.log(formData)
+
+    }, [])
 
     const onSubmit = async (e) => {
 
@@ -87,7 +99,7 @@ function AddPost(){
                                         <div className="col-lg-12">
                                             <div className="form-group focused">
                                                 <input type="text" 
-                                                    value={formData.title} 
+                                                    value={formData.title || ''} 
                                                     onChange={e => setFormData({...formData, title: e.target.value})}
                                                     className="form-control form-control-alternative" 
                                                     placeholder="Enter the title" 
@@ -101,7 +113,7 @@ function AddPost(){
                                             <div className="form-group focused">
                                                 <CKEditor
                                                     editor={ ClassicEditor }
-                                                    data="<p>Write something here....</p>"
+                                                    data={formData.text}
                                                     onChange={ ( e, editor ) => {
                                                         const data = editor.getData();
                                                         setFormData({...formData, text: data})

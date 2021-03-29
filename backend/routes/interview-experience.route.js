@@ -17,11 +17,12 @@ router.get('/', auth, async (req, res)=>{
 });
 
 //to show all experiences written by current user
-router.get('/my',auth,async (req,res)=>{
-    const myInterviewExp=await Interviewexp.find({userId:req.user.id});
-    if(!myInterviewExp)
-    {
-        res.json('You have not added any experiences:(');
+router.get('/my', auth, async (req,res) => {
+
+    const myInterviewExp = await Interviewexp.find({ userId: req.user.id }).populate('profileId', ['avatar']).populate('userId',['name'])
+    
+    if(!myInterviewExp) {
+        res.json({msg: 'You have not added any interview experience!!'});
     }
     else{
         res.json(myInterviewExp);
@@ -109,18 +110,19 @@ async (req,res)=>{
 });
 
 //to delete a post by the user
-router.delete('/my/:id',[
-    auth,
-],
-(req,res)=>{
-    const deletePost=Interviewexp.find({_id:req.body.id,userId:req.user.id});
+router.delete('/my/:id', auth, async (req, res) => {
+
+    const deletePost = await Interviewexp.findOne({ _id: req.params.id, userId: req.user.id });
+
     if(deletePost)
     {
-        Interviewexp.findByIdAndDelete(req.params.id)
-        .then(()=>res.json('Post Deleted'));
+        await Interviewexp.findByIdAndDelete(req.params.id)
     }
     else{
-        res.json('You are not Authoried to Delete this Post:)');
+        res.json({msg: 'You are not Authoried to Delete this Post'});
     }
 });
+
+
+
 module.exports = router;

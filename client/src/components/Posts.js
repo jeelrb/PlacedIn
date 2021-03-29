@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import PostItem from './PostItem'
 import axios from 'axios'
-import AddIcon from '@material-ui/icons/AddCircle';
+import AddIcon from '@material-ui/icons/AddBox';
 import Paper from '@material-ui/core/Paper';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import Tooltip from '@material-ui/core/Tooltip';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { MDBCol, MDBCard, MDBIcon } from 'mdbreact';
+import { MDBCol, MDBCard, MDBIcon, MDBBtn, MDBRow } from 'mdbreact';
 
 
 
@@ -13,12 +15,13 @@ function Post() {
 
     const [ posts, setPosts ] = useState([])
     const [ suggestions, setSuggestions ] = useState([])
-    const [value, setValue] = React.useState(0);
+    const [ toggle, setToggle ] = useState(false)
+    const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
 
     setValue(newValue);
-
+    
     if(newValue===0) {
 
         setSuggestions(posts)
@@ -44,6 +47,8 @@ function Post() {
         setSuggestions(temp)
 
     }
+
+    // console.log(suggestions)
 
   };
 
@@ -75,7 +80,7 @@ function Post() {
                 })
                 // console.log(posts.data.profileId.avatar)
                 setPosts(posts)
-                // setSuggestions(posts)
+                setSuggestions(posts)
 
             } catch (error) {
 
@@ -88,11 +93,11 @@ function Post() {
         fetchPosts()
         // console.log(posts.data.profileId.avatar)
 
-    }, [ suggestions])
+    }, [])
 
     return(
-        <MDBCol className="post pb-4 mt-5" xl="8">
-            <MDBCard className="mx-5">
+        <MDBCol className="post pb-4 mt-4" xl="8">
+            <MDBCard className="mx-5 mdb-color">
             <Paper className="mdb-color lighten-5">
             <Tabs
                 value={value}
@@ -101,20 +106,24 @@ function Post() {
                 textColor="primary"
                 centered
             >
-                <Tab label="All"  />
-                <Tab label="Posts" icon={<MDBIcon icon="pen"/>}/>
-                <Tab label="Interview Experiences" icon={<MDBIcon icon="chalkboard-teacher"/>}/>
+            <Tab label="All"  />
+            <Tab label="Posts" icon={<MDBIcon icon="pen"/>}/>
+            <Tab label="Interview Experiences" icon={<MDBIcon icon="chalkboard-teacher"/>}/>
+            {/* <Tooltip title="Add Post"><AddIcon style={{fontSize: '40'}} onClick={e => setToggle(!toggle)} className="my-auto ml-5 add_post" /></Tooltip> */}
             </Tabs>
             </Paper>
+            { 1 && <MDBRow className="mt-5 mx-5 mb-5">
+                <MDBCol size="12"><a href="/dashboard/post"><MDBBtn className="w-100 mx-auto">Add Post</MDBBtn></a></MDBCol>
+                <MDBCol size="12"><a href="/dashboard/interview-exp"><MDBBtn className="w-100 mx-auto" outline rounded>Add Interview Experience</MDBBtn></a></MDBCol>
+            </MDBRow> }
             </MDBCard>
+        
             {
                 suggestions.length!==0 ? 
                 suggestions.map((post) => {
-                    return <PostItem  key={post._id} data={post} />
+                    return <PostItem  key={post._id} data={post} parent="posts"/>
                 }) : 
-                posts.map((post) => {
-                    return <PostItem  key={post._id} data={post} />
-                })
+                <Alert  className="mx-5 mt-5" severity="info">No posts</Alert>
 
             }
             {/* <PostItem />

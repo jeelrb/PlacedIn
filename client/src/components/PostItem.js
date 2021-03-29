@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import CommentBox from './CommentBox'
 import parse from 'html-react-parser'
 import Chip from '@material-ui/core/Chip';
+import axios from 'axios'
+import Tooltip from '@material-ui/core/Tooltip';
 import Avatar from '@material-ui/core/Avatar';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import AddComment from '@material-ui/icons/AddCommentRounded';
 import Like from '@material-ui/icons/ThumbUpAltOutlined';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -41,7 +46,41 @@ function PostItem(props) {
         text = text.replace('url','src')
         // console.log(text)
         setText(text)
+
     }, [] )
+
+    const onDelete = async () =>{
+        
+        // props.onFlag()
+
+        try {
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'auth-token': localStorage.getItem('token')
+                }
+            }
+            
+            let res1
+            if(props.parent==='Interview Experience') {
+                res1 = await axios.delete(`http://localhost:5000/interview/my/${props.data._id}`, config)
+                // props.onFlag()
+            } else if(props.parent==='Post') {
+                res1 = await axios.delete(`http://localhost:5000/post/my/${props.data._id}`, config)
+                // props.onFlag()
+            }
+            props.onFlag()
+            console.log(res1)
+
+        } catch (error) {
+
+            console.log(error.response)
+
+        }
+        
+
+    }
 
     return (
         <MDBRow className="mt-5">
@@ -49,8 +88,9 @@ function PostItem(props) {
                 <MDBCard className="mx-5">
                     <MDBCardHeader className=" light-blue darken-3">
                         <MDBRow>
-                            <MDBCol size="1"><Avatar src={props.data.profileId ? `/images/${props.data.profileId.avatar}` : ''} className="red">{props.data.userId.name[0]}</Avatar></MDBCol>
+                            <MDBCol size="1" className="m-0"><Avatar src={props.data.profileId ? `/images/${props.data.profileId.avatar}` : ''} className="red">{props.data.userId.name[0]}</Avatar></MDBCol>
                             <MDBCol size="11" className="text-left"><h5 className="text-white font-weight-bold m-0 mt-1">{props.data.userId.name}</h5><h6 className="m-0 mt-1 text-white">26-03-2021</h6></MDBCol>
+                           
                         </MDBRow>
                     </MDBCardHeader>
                     <MDBCardBody className="white">
@@ -73,8 +113,13 @@ function PostItem(props) {
                         {/* <Chip label="DP"  color="default"/><Chip label="Binary Search"  color="secondary"/> */}
                     </MDBCardBody>
                     <MDBCardFooter className="grey lighten-3"> 
-                        <Like className="mr-3 likeNComment" style={{color:'#00838f'}}/><AddComment  className="likeNComment" onClick={onClick} style={{color:'#00838f'}} />
-                        { onCommentClick &&  <CommentBox />}
+                        <Tooltip className="edit" title="Like"><Like className="mr-3 likeNComment" style={{color:'#00838f'}}/></Tooltip>
+                        <Tooltip className="edit" title="Comment"><AddComment  className="likeNComment mr-3" onClick={onClick} style={{color:'#00838f'}} /></Tooltip>
+                        <Link to={{ pathname: '/dashboard/post', postId: props.data._id, title: props.data.title, text: props.data.text }}>
+                            {props.parent!=='posts' && <Tooltip className="edit mr-3" title={`Edit ${props.parent}`}><EditIcon style={{color:'#00838f'}}/></Tooltip> }
+                        </Link>
+                        {props.parent!=='posts' && <Tooltip className="edit" title={`Delete ${props.parent}`}><DeleteIcon onClick={e => props.onDelete(props.data._id)} style={{color:'#00838f'}}/></Tooltip> }
+                        { onCommentClick &&  <CommentBox postId={props.data._id}/>}
                     </MDBCardFooter>
                 </MDBCard>
             </MDBCol>

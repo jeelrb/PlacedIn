@@ -8,6 +8,8 @@ import Profile from './components/Profile'
 import InterviewExperience from './components/InterviewExperience'
 import Colleagues from './components/Colleagues'
 import AddPost from './components/AddPost'
+import YourPosts from './components/YourPosts'
+import YourInterviewExperiences from './components/YouInterviewExperiences'
 import PrivateRoute from './components/routing/PrivateRoute'
 import {BrowserRouter as Router , Route, Switch} from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css'; 
@@ -41,6 +43,8 @@ function App() {
           <PrivateRoute path="/dashboard/profiles/:user" component={Profile}></PrivateRoute>
           <PrivateRoute path="/dashboard/interview-exp" component={InterviewExperience}></PrivateRoute>
           <PrivateRoute path="/dashboard/post" component={AddPost}></PrivateRoute>
+          <PrivateRoute path="/dashboard/myposts" component={YourPosts}></PrivateRoute>
+          <PrivateRoute path="/dashboard/myinterviewexperiences" component={YourInterviewExperiences}></PrivateRoute>
         </Switch>
     </Router>
   );

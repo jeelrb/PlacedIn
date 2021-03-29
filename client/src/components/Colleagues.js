@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Avatar from '@material-ui/core/Avatar';
 import Navbar from './Navbar'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
@@ -12,7 +13,10 @@ const ColleagueProfile = (props) => {
         <MDBContainer>
             <MDBCard className="mb-3">
                 <MDBCardHeader className=" teal lighten-2">
-                    <MDBCardTitle className="text-white font-weight-bold mt-3"><img src={`/images/${props.details.avatar}`} alt="Admin" className="rounded-circle white mr-3" width="60"></img>        { props.details.name }</MDBCardTitle>
+                <MDBRow>
+                            <MDBCol size="1" className="text-right"><Avatar src={props.details.avatar ? `/images/${props.details.avatar}` : ''} className="red">{props.details.name[0]}</Avatar></MDBCol>
+                            <MDBCol size="11" className="text-left"><h5 className="text-white font-weight-bold m-0 mt-1">{props.details.name}</h5><h6 className="m-0 mt-1 text-white">26-03-2021</h6></MDBCol>
+                        </MDBRow>
                 </MDBCardHeader>
                 <MDBCardBody className="grey lighten-4">
                     <MDBRow>

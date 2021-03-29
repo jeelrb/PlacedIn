@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Avatar from '@material-ui/core/Avatar';
 import axios from 'axios'
 import Navbar from './Navbar';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -78,44 +79,51 @@ function Profile(props){
                 let res1, res2, res3
                 let  cfRating, cfMaxRating, cfRank, cfMaxRank, cfProfile, ccRank, ccRating, ccMaxRating, ccMaxRank, ccProfile, githubRepos
 
-                if(cfUserName) {
-                    res1 = await axios.get(`https://competitive-coding-api.herokuapp.com/api/codeforces/${cfUserName}`)
-                }
-                if(ccUserName) {
-                    res2 = await axios.get(`https://competitive-coding-api.herokuapp.com/api/codechef/${ccUserName}`)
-    
-                }
-                if(githubUserName){
-                    res3 = await axios.get(`https://api.github.com/users/${githubUserName}/repos`)
-                }
-                
-                // console.log(res1)
-                // console.log(res2)
-                // console.log(res3)
-
-                cfRating =  res1.data.rating
-                cfMaxRating =  res1['data']['max rating']
-                cfRank =  res1.data.rank
-                cfMaxRank = res1['data']['max rank']
-                cfProfile =  `https://codeforces.com/profile/${cfUserName}`
-
-                ccRating = res2.data.rating
-                ccMaxRating =  res2.data.highest_rating
-                ccRank =  res2.data.stars
-                ccProfile =  `https://www.codechef.com/users/${ccUserName}`
-                if(ccMaxRating<=1399)ccMaxRank = 1
-                else if(ccMaxRating<=1599)ccMaxRank = 2
-                else if(ccMaxRating<=1799)ccMaxRank = 3
-                else if(ccMaxRating<=1999)ccMaxRank = 4
-                else if(ccMaxRating<=2199)ccMaxRank = 5
-                else if(ccMaxRating<=2499)ccMaxRank = 6
-                else ccMaxRank = 7
-                
-                githubRepos = res3.data.map((repo) => {
-                    return { name: repo.name, fullName: repo.full_name, id: repo.id }
+                await Promise.all([
+                    cfUserName && await axios.get(`https://competitive-coding-api.herokuapp.com/api/codeforces/${cfUserName}`),
+                    ccUserName && await axios.get(`https://competitive-coding-api.herokuapp.com/api/codechef/${ccUserName}`),
+                    githubUserName && await axios.get(`https://api.github.com/users/${githubUserName}/repos`)
+                ])
+                .then( async ([cf, cc, github]) => {
+                    res1 = cf
+                    res2 = cc
+                    res3 = github
                 })
+                .catch(error => {
+                    console.log(error)
+                }) 
 
-                const githubProfile = `https://github.com/${githubUserName}`
+    
+                if(typeof res1 !== 'undefined') {
+                    cfRating =  res1.data.rating
+                    cfMaxRating =  res1['data']['max rating']
+                    cfRank =  res1.data.rank
+                    cfMaxRank = res1['data']['max rank']
+                    cfProfile =  `https://codeforces.com/profile/${cfUserName}`
+                }
+                console.log(res2)
+                if(typeof res2 !== 'undefined') {
+                    ccRating = res2.data.rating
+                    ccMaxRating =  res2.data.highest_rating
+                    ccRank =  Number(res2.data.stars[0])
+                    ccProfile =  `https://www.codechef.com/users/${ccUserName}`
+                    if(ccMaxRating<=1399)ccMaxRank = 1
+                    else if(ccMaxRating<=1599)ccMaxRank = 2
+                    else if(ccMaxRating<=1799)ccMaxRank = 3
+                    else if(ccMaxRating<=1999)ccMaxRank = 4
+                    else if(ccMaxRating<=2199)ccMaxRank = 5
+                    else if(ccMaxRating<=2499)ccMaxRank = 6
+                    else ccMaxRank = 7
+                }
+                
+                let githubProfile
+                if(typeof res3 !== 'undefined') {
+                    githubRepos = res3.data.map((repo) => {
+                        return { name: repo.name, fullName: repo.full_name, id: repo.id }
+                    })
+    
+                    githubProfile = `https://github.com/${githubUserName}`
+                }
 
                 setUserData({ skills: userSkills, name: res.data.userId.name, company, portfolio, twitter, instagram, linkedIn, facebook, college, degree, branch, batch, cfUserName, ccUserName, cfRating, ccRating, cfRank, ccRank, cfMaxRating, ccMaxRating, cfMaxRank, ccMaxRank, cfProfile, ccProfile, githubUserName, githubRepos, githubProfile, avatar })
                 setIsLoading(false)
@@ -123,7 +131,7 @@ function Profile(props){
                 localStorage.setItem('user', JSON.stringify({ skills: userSkills, name: res.data.userId.name, avatar, company, portfolio, twitter, instagram, linkedIn, facebook, college, degree, branch, batch, cfUserName, ccUserName, cfRating, ccRating, cfRank, ccRank, cfMaxRating, ccMaxRating, cfMaxRank, ccMaxRank, cfProfile, ccProfile, githubUserName, githubRepos, githubProfile }))
     
             } catch (error) {
-                console.log(error.response.data.msg)
+                console.log(error)
             }
 
         }
@@ -143,14 +151,15 @@ function Profile(props){
     return(
         <>
             <Navbar ></Navbar>
-            { isLoading ?  <LinearProgress /> : <MDBContainer mt="4" className="mt-4 details_container">
+            { isLoading && userData ?  <LinearProgress /> : <MDBContainer mt="4" className="mt-4 details_container">
                 <MDBRow className="mt-4">
                     <MDBCol md="12">   
                         <MDBCard className="card_container text-center  mdb-color darken-1">
                             <MDBRow className="mb-4">
                                 <MDBCol>
                                     <MDBCardBody className="mt-5">
-                                        <img src={`/images/${userData.avatar}`} alt="Admin" className="rounded-circle white" width="200"></img>
+                                    <Avatar src={userData.avatar ? `/images/${userData.avatar}` : ''} className="red mx-auto" style={{width: '200px', height: '200px'}}>{userData.name ? userData.name[0] : ''}</Avatar>
+                                        {/* <img src={`/images/${userData.avatar}`} alt="Admin" className="rounded-circle white" width="200"></img> */}
                                         <MDBCardTitle className="white-text mt-3">{userData.name}</MDBCardTitle>
                                         <MDBCardText className="white-text">{userData.company}</MDBCardText>
                                     </MDBCardBody>

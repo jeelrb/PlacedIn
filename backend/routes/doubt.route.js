@@ -22,11 +22,27 @@ router.get('/', auth, async (req, res) => {
 });
 
 //to show the users post
-router.get('/me', auth, async (req, res) => {
+router.get('/my', auth, async (req, res) => {
 
-    Post.find({userId:req.user.id})
-    .then(posts => res.json(posts))
-    .catch(err => res.status(400).json('Error : '+err));
+    const post = await Post.find({userId: req.user.id}).populate('profileId', ['avatar']).populate('userId',['name'])
+
+    if(!post) {
+        res.json({msg: 'You have not added any post!!'});
+    } else {
+        res.json(post)
+    }
+
+})
+
+//Post by id
+router.get('/:id', auth, async (req, res) => {
+
+    const post = await Post.findOne({ userId: req.user.id, _id: req.params.id })
+    if(post) {
+        res.json(post)
+    } else {
+        res.json({msg: 'Post does not exist'})
+    }
 
 })
 
@@ -36,7 +52,7 @@ router.post('/add',[
     check('text', 'Text is required').not().isEmpty(),
     check('title', 'Title is required').not().isEmpty(),
 ],
-async (req,res)=>{
+async (req,res) => {
     const errors = validationResult(req)
     if(!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() })
@@ -62,12 +78,15 @@ async (req,res)=>{
 });
 
 //To update particular post of the user
-router.post('/my/:id',[
+router.put('/my/:id',[
     auth,
-    check('text', 'Text is required').not().isEmpty(),
-    check('title', 'Title is required').not().isEmpty(),
+    [
+        check('text', 'Text is required').not().isEmpty(),
+        check('title', 'Title is required').not().isEmpty(),
+    ]
 ],
-async (req,res)=>{
+async (req,res) => {
+
     const errors = validationResult(req)
     if(!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() })
@@ -78,9 +97,9 @@ async (req,res)=>{
         return res.status(400).json({ error: 'Please try loging in again' })
     }
     
-    const {text,title} = req.body;
+    const { text, title } = req.body;
 
-    const updatePost=Post.find({_id:req.params.id,userId:req.user.id});
+    const updatePost = Post.find({ _id: req.params.id, userId: req.user.id });
     if(updatePost)
     {
         Post.findById(req.params.id)
@@ -98,19 +117,54 @@ async (req,res)=>{
 });
 
 //to delete a post by the user
-router.delete('/my/:id',[
-    auth,
-],
-(req,res)=>{
-    const deletePost=Post.find({_id:req.body.id,userId:req.user.id});
-    if(deletePost)
-    {
-        Post.findByIdAndDelete(req.params.id)
-        .then(()=>res.json('Post Deleted'));
+router.delete('/my/:id', auth, async (req, res) => {
+
+    const deletepost = await Post.find({ _id: req.params.id, userId: req.user.id })
+
+    if(deletepost) {
+
+        await Post.findByIdAndDelete(req.params.id)
+ 
+   }else{
+
+        res.json({msg: 'You are not Authoried to Delete this Post'});
+
     }
-    else{
-        res.json('You are not Authoried to Delete this Post:)');
-    }
+
+    
+
+    res.json({msg: 'Post Deleted'})
+
+    
 });
+
+
+router.put('/comment/:id', auth, async (req, res) => {
+
+
+    const user = await User.findById(req.user.id)
+    const post = await Post.findOne({ userId: req.user.id, _id: req.params.id })
+
+    const newComment = {
+        text: req.body.text,
+        name: user.name,
+        userId: req.user.id
+    }
+
+    if(!post.comments)post.comments = []
+
+    post.comments.unshift(newComment)
+
+    await post.save()
+
+    res.json(post)
+})
+
+router.get('/comment/:id', auth, async (req, res) => {
+
+    const post = await Post.findOne({ userId: req.user.id, _id: req.params.id })
+    res.json(post.comments)
+
+})
 
 module.exports = router;

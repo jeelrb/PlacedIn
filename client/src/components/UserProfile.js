@@ -23,7 +23,7 @@ function UserProfile() {
                 }
 
                 const res = await axios.get(`http://localhost:5000/profile/me`, config)
-                console.log(res)
+                // console.log(res)
                 setMyProfile(res)
 
             } catch (error) {
@@ -39,8 +39,8 @@ function UserProfile() {
     }, [])
 
     return(
-        <MDBCol className="profile pb-4 mt-5" xl="4">
-            <MDBCard className="profile_container mdb-color darken-1 mr-5">
+        <MDBCol className="profile pb-4 mt-4" xl="4">
+            <MDBCard className="profile_container mdb-color darken-1 mr-5 mb-5">
                 <MDBRow>
                     <MDBCol className="text-center">
                         <MDBCardBody className="mt-3">
@@ -56,7 +56,7 @@ function UserProfile() {
                             <MDBRow>
                                 <MDBCol>
                                 <a href="!#"><Chip label='Posts' color="secondary" className="mr-2 chips_logo"/></a><a href="!#"><Chip label='Interview Experiences' color="default" className="mr-2 chips_logo"/></a>
-                                <a href="!#"><Chip label='Full profile' color="primary" className='chips_logo mr-2'/></a><a href="!#"><Chip label='Profile Settings' color='primary' className='chips_logo mt-2'/></a>
+                                <a href="!#"><Chip label='Profile Settings' color='primary' className='chips_logo'/></a>
                                 </MDBCol>
                             </MDBRow>
                             <hr className="hr-text mt-5" data-content=""></hr>

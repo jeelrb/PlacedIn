@@ -218,7 +218,13 @@ a:hover {
 }
 
 /* Profile Page CSS */
+
+.profile {
+  
+}
+
 .profile_container {
+  position: fixed !important;
   background-color: white;
   padding: 50px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -359,4 +365,11 @@ option {
   color: white !important
 }
 
+.add_post:hover {
+  color: rgb(89, 92, 97)
+}
 
+.edit:hover {
+  color: black !important;
+  cursor:  pointer !important;
+}

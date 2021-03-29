@@ -32,8 +32,11 @@ function Navbar(props) {
                     <MDBNavItem active={window.location.pathname==='/dashboard/profiles'}>
                     <MDBNavLink className="navbar_item" to="/dashboard/profiles" >Colleagues</MDBNavLink>
                     </MDBNavItem>
-                    <MDBNavItem active={select.interview}>
-                    <MDBNavLink className="navbar_item" to="#!" >Interview Experiences</MDBNavLink>
+                    <MDBNavItem active={window.location.pathname==='/dashboard/myposts'}>
+                    <MDBNavLink className="navbar_item" to="/dashboard/myposts" >My Posts</MDBNavLink>
+                    </MDBNavItem>
+                    <MDBNavItem active={window.location.pathname==='/dashboard/myinterviewexperiences'}>
+                    <MDBNavLink className="navbar_item" to="/dashboard/myinterviewexperiences" >My Interview Experiences</MDBNavLink>
                     </MDBNavItem>
                 </MDBNavbarNav>
                 <MDBNavbarNav right className="pr-5">
