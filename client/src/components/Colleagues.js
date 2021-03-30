@@ -95,9 +95,9 @@ function Colleague(){
                 axios.get('http://localhost:5000/profile', config)
                     .then((res) => {
                         const users = res.data.map((user) => {
-                            return { instagram: user.instagram, twitter: user.twitter, facebook: user.facebook, linkedIn: user.linkedIn, avatar: user.avatar, company: user.company, name: user.userId.name, username: user.userId.username, userId: user.userId._id }
+                            return { instagram: user.instagram, twitter: user.twitter, facebook: user.facebook, linkedIn: user.linkedIn, avatar: user.userId.avatar, company: user.company, name: user.userId.name, username: user.userId.username, userId: user.userId._id }
                         })
-                        
+                        console.log(users)
                         setProfiles(users)
                         setSuggestions(users)
                     })
@@ -171,7 +171,7 @@ function Colleague(){
                     { suggestions.map((profile, index) => { 
                         return <ColleagueProfile key={index} details={{ 
                             name: profile.name || '',
-                            avatar: profile.userId.avatar || '',
+                            avatar: profile.avatar || '',
                             username: profile.username || '',
                             linkedIn: profile.linkedIn || '',
                             instagram: profile.instagram || '',
