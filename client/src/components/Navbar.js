@@ -19,7 +19,7 @@ function Navbar(props) {
 
     return(
         <>
-            <MDBNavbar color="blue-grey" dark expand="md" className="sticky-top">
+            <MDBNavbar color=" mdb-color lighten-1" dark expand="md" className="sticky-top">
             <MDBNavbarBrand>
                 <strong className="white-text">PlacedIn</strong>
             </MDBNavbarBrand>

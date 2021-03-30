@@ -159,7 +159,6 @@ function Profile(props){
                                 <MDBCol>
                                     <MDBCardBody className="mt-5">
                                     <Avatar src={userData.avatar ? `/images/${userData.avatar}` : ''} className="red mx-auto" style={{width: '200px', height: '200px'}}>{userData.name ? userData.name[0] : ''}</Avatar>
-                                        {/* <img src={`/images/${userData.avatar}`} alt="Admin" className="rounded-circle white" width="200"></img> */}
                                         <MDBCardTitle className="white-text mt-3">{userData.name}</MDBCardTitle>
                                         <MDBCardText className="white-text">{userData.company}</MDBCardText>
                                     </MDBCardBody>

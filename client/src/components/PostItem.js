@@ -92,12 +92,12 @@ function PostItem(props) {
                         </MDBRow>
                     </MDBCardHeader>
                     <MDBCardBody className="white">
-                    <h5 style={{color: '#bf360c'}} className="mb-4">{title}</h5>
+                    <h5 style={{color: '#bf360c'}} className="mb-4 font-weight-bolder">{title}</h5>
                         <MDBRow className="text-center">
                             <MDBCol>
                                 { questions.length!==0 && <hr className="hr-text-form" data-content="Programming Questions asked"></hr> }
                                 { questions.map((topic) => {
-                                return <Chip key={topic.value} label={topic.label}  color="secondary" className="mr-3 mb-2"/> 
+                                return <Chip key={topic.value} label={topic.label}   color="default" className="mr-3 mb-2"/> 
                                 }) }
                                 { subjects.length!==0 && <hr className="hr-text-form mt-5" data-content="CS Fundamentals asked"></hr> }
                                 { subjects.map((topic) => {
@@ -110,12 +110,16 @@ function PostItem(props) {
                         {/* { parse(text) } */}
                         {/* <Chip label="DP"  color="default"/><Chip label="Binary Search"  color="secondary"/> */}
                     </MDBCardBody>
-                    <MDBCardFooter className="grey lighten-3"> 
+                    <MDBCardFooter className="grey lighten-3 mt-5"> 
                         <Tooltip className="edit" title="Like"><Like className="mr-3 likeNComment" style={{color:'#00838f'}}/></Tooltip>
                         <Tooltip className="edit" title="Comment"><AddComment  className="likeNComment mr-3" onClick={onClick} style={{color:'#00838f'}} /></Tooltip>
-                        <Link to={{ pathname: '/dashboard/post', postId: props.data._id, title: props.data.title, text: props.data.text }}>
+                        { props.parent==='Post' ? <Link to={{ pathname: '/dashboard/post', postId: props.data._id, title: props.data.title, text: props.data.text }}>
+                            {props.parent!=='posts' && <Tooltip className="edit mr-3" title={`Edit ${props.parent}`}><EditIcon style={{color:'#00838f'}}/></Tooltip> }
+                        </Link> : 
+                        <Link to={{ pathname: '/dashboard/interview-exp', data: props.data }}>
                             {props.parent!=='posts' && <Tooltip className="edit mr-3" title={`Edit ${props.parent}`}><EditIcon style={{color:'#00838f'}}/></Tooltip> }
                         </Link>
+                        }
                         {props.parent!=='posts' && <Tooltip className="edit" title={`Delete ${props.parent}`}><DeleteIcon onClick={e => props.onDelete(props.data._id)} style={{color:'#00838f'}}/></Tooltip> }
                         { onCommentClick &&  <CommentBox postId={props.data._id} type={type} />}
                     </MDBCardFooter>

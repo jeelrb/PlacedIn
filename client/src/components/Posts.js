@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from 'react-router-dom'
 import PostItem from './PostItem'
 import axios from 'axios'
 import AddIcon from '@material-ui/icons/AddBox';
@@ -111,8 +112,10 @@ function Post() {
             </Tabs>
             </Paper>
             { 1 && <MDBRow className="mt-5 mx-5 mb-5">
-                <MDBCol size="12"><a href="/dashboard/post"><MDBBtn className="w-100 mx-auto">Add Post</MDBBtn></a></MDBCol>
-                <MDBCol size="12"><a href="/dashboard/interview-exp"><MDBBtn className="w-100 mx-auto" outline rounded>Add Interview Experience</MDBBtn></a></MDBCol>
+            
+            
+                <MDBCol size="12"><Link to={{pathname: 'dashboard/post'}}><MDBBtn className="w-100 mx-auto">Add Post</MDBBtn></Link></MDBCol>
+                <MDBCol size="12"><Link to={{pathname: 'dashboard/interview-exp'}}><MDBBtn className="w-100 mx-auto" outline rounded>Add Interview Experience</MDBBtn></Link></MDBCol>
             </MDBRow> }
             </MDBCard>
         

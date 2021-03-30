@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from './Navbar'
 import axios from 'axios'
 import { Redirect } from 'react-router-dom';
@@ -11,11 +11,11 @@ import 'react-toastify/dist/ReactToastify.css'
 
 const programminglabels = [
     { label: 'Array', value: '1' }, { label: 'String', value: '2' }, { label: 'DP', value: '3' }, { label: 'Binary Search', value: '4' }, { label: 'Sort', value: '5' },
-    { label: 'Greedy', value: '6' }, { label: 'Two Pointers', value: '7' }, { label: 'Slvalueing Window', value: '8' }, { label: 'Stack', value: '9' },
+    { label: 'Greedy', value: '6' }, { label: 'Two Pointers', value: '7' }, { label: 'Sliding Window', value: '8' }, { label: 'Stack', value: '9' },
     { label: 'Queue', value: '10' }, { label: 'Heap', value: '11' }, { label: 'Priority Queue', value: '12' }, { label: 'Tree', value: '13' }, 
     { label: 'Linked List', value: '14' }, { label: 'Recursion', value: '15' }, { label: 'Hashing', value: '16' }, { label: 'BST', value: '17' },
     { label: 'Backtracking', value: '18' }, { label: 'DFS, BFS', value: '19' }, { label: 'Graph', value: '20' }, { label: 'Union Find', value: '21' },
-    { label: 'Divvaluee and Conquer', value: '22' }, { label: 'Shortest Path', value: '23' }, { label: 'Topological Sort', value: '24' }, { label: 'Trie', value: '25' }
+    { label: 'Divide and Conquer', value: '22' }, { label: 'Shortest Path', value: '23' }, { label: 'Topological Sort', value: '24' }, { label: 'Trie', value: '25' }
 ]
 
 const CSFundamentals = [
@@ -23,7 +23,7 @@ const CSFundamentals = [
     { label: 'Operating System', value: '4' }, { label: 'Database Management System', value: '5' }, { label: 'Computer Networks', value: '6' }, { label: 'Computer Architecture', value: '7' }, { label: 'Theory of Computation', value: '8' }, { label: 'Compiler Design', value: '9' }
 ]
 
-function InterviewExperience() {
+function InterviewExperience(props) {
 
     const [ programmingTopics, setProgrammingTopics ] = useState([])
     const [ csFundamentals, setCSFundamentals ] = useState([]);
@@ -36,6 +36,25 @@ function InterviewExperience() {
         roleError: '',
         csFundamentalsError: ''
     })
+
+     useEffect(() => {
+
+        // console.log(props.location.data.programmingTopics)
+
+        if(props.location.data) {
+            setFormData({ company: props.location.data.experience.company, role: props.location.data.experience.role, text: props.location.data.experience.text })
+            setProgrammingTopics(props.location.data.experience.programmingTopics)
+            setCSFundamentals(props.location.data.experience.csFundamentals)
+            localStorage.setItem("data", JSON.stringify(props.location.data))
+        } else if ( localStorage.getItem("data") ) {
+            const data = JSON.parse(localStorage.getItem("data"))
+            console.log(data)
+            setFormData({ company: data.experience.company, role: data.experience.role, text: data.experience.text })
+            setProgrammingTopics(data.experience.programmingTopics)
+            setCSFundamentals(data.experience.csFundamentals)
+        }
+
+     }, [])
 
     const onSubmit = async (e) => {
 
@@ -86,26 +105,49 @@ function InterviewExperience() {
             const body = {
                 company, role, text,  programmingTopics, csFundamentals 
             }
+              
+            if(localStorage.getItem("data")) {
 
-            const res = await axios.post('http://localhost:5000/interview/add', body, config)
+                const id = JSON.parse(localStorage.getItem("data"))._id
+                console.log('Hi')
 
-            setIsSubmited(true)
+                const res = await axios.put(`http://localhost:5000/interview/my/${id}`, body, config)
 
-            toast.success('Interview experience added successfully !', { 
-                position: toast.POSITION.TOP_CENTER,
-                autoClose: 2000
-            })
+                setIsSubmited(true)
+
+                toast.success('Interview experience updated successfully !', { 
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 2000
+                })
+
+            } else {
+
+                const res = await axios.post('http://localhost:5000/interview/add', body, config)
+
+                setIsSubmited(true)
+
+                toast.success('Interview experience added successfully !', { 
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 2000
+                })
+
+            }
+            
 
 
         } catch (error) {
 
-            console.log(error.response.data.error)
+            console.log(error)
 
         }
     }
 
     if(isSubmitted) {
-        return <Redirect to='/dashboard' />
+        if(localStorage.getItem('data')) {
+            localStorage.removeItem('data')
+            return <Redirect to='/dashboard/myinterviewexperiences' />
+        } 
+        return <Redirect to='/dashboard'/>
     }
 
     return (
@@ -136,12 +178,12 @@ function InterviewExperience() {
                                         </div>
                                         <div className="col-lg-6">
                                             <div className="form-group focused">
-                                                <label className="form-control-label" htmlFor="input-role">Role <span className="text-danger">*</span></label>
+                                                <label className="form-control-label" htmlFor="input-role">For <span className="text-danger">*</span></label>
                                                 <input type="text" 
                                                     value={formData.role} 
                                                     onChange={e => setFormData({...formData, role: e.target.value})}
                                                     className="form-control form-control-alternative" 
-                                                    placeholder="Full time / Intern" 
+                                                    placeholder="Placement / Internship" 
                                                 />
                                             </div>
                                         </div>
@@ -178,16 +220,19 @@ function InterviewExperience() {
                                             <div className="form-group focused">
                                                 <CKEditor
                                                     editor={ ClassicEditor }
-                                                    data="<p>Write your interview experience here....</p>"
+                                                    data={ formData.text }
                                                     onChange={ ( e, editor ) => {
                                                         const data = editor.getData();
                                                         setFormData({...formData, text: data})
                                                     } }
+                                                    onReady={ editor => {
+                                                        editor.setData(formData.text)
+                                                    }}
                                                 />
                                             </div>
                                         </div>
                                     </div>
-                                    <button className="mt-3 mb-3 btn blue-grey lighten-1 text-white font-weight-bold" type="submit">Submit <MDBIcon far icon="paper-plane" className="ml-2" /></button>
+                                    <div className="text-center"><button className="mt-5 mb-5 btn w-75 cyan darken-3 text-white font-weight-bold" type="submit">Add Interview Experience <MDBIcon far icon="paper-plane" className="ml-2" /></button></div>
                                 </div>
                             </form>
                         </MDBCardBody>

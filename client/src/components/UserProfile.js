@@ -42,8 +42,8 @@ function UserProfile() {
     }, [])
 
     return(
-         <MDBCol className="profile pb-4 mt-4" xl="4">
-            { isProfile ? <MDBCard className="profile_container mdb-color darken-1 mr-5 mb-5">
+         <MDBCol className="profile pb-4 mt-4 " xl="4">
+            { isProfile ? <MDBCard className="profile_container mdb-color darken-1 mb-5">
                 <MDBRow>
                     <MDBCol className="text-center">
                           <MDBCardBody className="mt-3">

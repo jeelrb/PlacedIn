@@ -93,6 +93,8 @@ function AddProfile(){
 
         e.preventDefault()
 
+        setErrors({ cfUserNameError: '', ccUserNameError: '', githubUserNameError: '' })
+
         let cfUserNameError='', ccUserNameError='', githubUserNameError=''
         let res1, res2, res3, res5;
 
@@ -167,7 +169,7 @@ function AddProfile(){
             //If no error occured then change isSubmit to true
             setIsSubmited(true)
 
-            toast.success('Profile added successfully!!', { 
+            toast.success('Profile Updated !!', { 
                 position: toast.POSITION.TOP_CENTER,
                 autoClose: 2000
              })
@@ -186,18 +188,18 @@ function AddProfile(){
     return (
         <>
             <Navbar />
-                <div className="container mt-4">
+                <div className="container mt-4 mb-5">
                 <div className="card shadow">
-                    <div className="card-header border-0">
+                    <div className="card-header border-0  cyan darken-3 lighten-1">
                         <div className="row">
-                            <div className="col-12">
-                                <h3 className="mb-0 text-white profileForm_header">My account</h3>
+                            <div className="col-12 text-center">
+                                <h4 className="mb-0 text-white font-weight-bold profileForm_header">Profile Settings</h4>
                             </div>
                         </div>
                     </div>
                 <div className="card-body">
                 <form className="needs-validation" onSubmit={ e => onSubmit(e) } encType='multipart/form-data'>
-                <h6 className="heading-small text-muted mb-4">Education and Profesional Details</h6>
+                <hr className="hr-text-form mt-5 mb-3" data-content="Educational and Professional Details"></hr>
                     <div className="pl-lg-4">
                         <div className="row">
                             <div className="col-md-6">
@@ -237,8 +239,8 @@ function AddProfile(){
                             </div>
                         </div>
                     </div>
-                    <hr className="my-4 bg-primary" />
-                    <h6 className="heading-small text-muted mb-4">Skills</h6>
+                    
+                    <hr className="hr-text-form mt-5 mb-3" data-content="Skills"></hr>
                     <div className="pl-lg-4">
                         <div className="row">
                             <div className="col-md-12">
@@ -250,8 +252,7 @@ function AddProfile(){
                             </div>
                         </div>
                     </div>
-                    <hr className="my-4 bg-primary"></hr>
-                    <h6 className="heading-small text-muted mb-4">Coding Platform information</h6>
+                    <hr className="hr-text-form mt-5 mb-4" data-content="Coding Platform Information"></hr>
                     <div className="pl-lg-4">
                         <div className="row">
                             <div className="col-lg-4">
@@ -282,8 +283,7 @@ function AddProfile(){
                             </div>
                         </div>
                     </div>
-                    <hr className="bg-primary"></hr>
-                    <h6 className="heading-small text-muted mb-4">Social information</h6>
+                    <hr className="hr-text-form mt-5 mb-3" data-content="Social Information"></hr>
                     <div className="pl-lg-4">
                         <div className="row">
                             <div className="col-lg-12 mb-3">
@@ -300,15 +300,15 @@ function AddProfile(){
                             </div>
                             <div className="col-lg-12">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" htmlFor="input-website">Portfolio Website</label>
-                                    <input type="text" id="input-website" className="form-control form-control-alternative" placeholder="Enter your Website Here" 
+                                    <label className="form-control-label" htmlFor="input-website">Portfolio / Resume Link</label>
+                                    <input type="text" id="input-website" className="form-control form-control-alternative" placeholder="Enter link here" 
                                      value={ profile.portfolio || '' }   onChange={ e => setProfile({...profile, portfolio: e.target.value }) } />
                                 </div>
                             </div>
                             <div className="col-lg-6">
                                 <div className="form-group focused">
                                     <label className="form-control-label" htmlFor="input-linkedin">Linkedin</label>
-                                    <input type="text" id="input-linkedin" className="form-control form-control-alternative" placeholder="Enter Linkedin ID" 
+                                    <input type="text" id="input-linkedin" className="form-control form-control-alternative" placeholder="Enter Linkedin profile link" 
                                         value={ profile.linkedIn || '' }   onChange={ e => setProfile({...profile, linkedIn: e.target.value }) }
                                     />
                                 </div>
@@ -316,7 +316,7 @@ function AddProfile(){
                             <div className="col-lg-6">
                                 <div className="form-group">
                                     <label className="form-control-label" htmlFor="input-insta">Instagram</label>
-                                    <input type="text" id="input-insta" className="form-control form-control-alternative" placeholder="Enter Instagram ID" 
+                                    <input type="text" id="input-insta" className="form-control form-control-alternative" placeholder="Enter Instagram profile link" 
                                         value={ profile.instagram || '' }   onChange={ e => setProfile({...profile, instagram: e.target.value }) }
                                     />
                                 </div>
@@ -325,7 +325,7 @@ function AddProfile(){
                             <div className="col-lg-6">
                                 <div className="form-group focused">
                                     <label className="form-control-label" htmlFor="input-twitter">Twitter</label>
-                                    <input type="text" id="input-twitter" className="form-control form-control-alternative" placeholder="Enter Twitter ID" 
+                                    <input type="text" id="input-twitter" className="form-control form-control-alternative" placeholder="Enter Twitter profile link" 
                                         value={ profile.twitter || '' }   onChange={ e => setProfile({...profile, twitter: e.target.value }) }
                                     />
                                 </div>
@@ -333,7 +333,7 @@ function AddProfile(){
                             <div className="col-lg-6">
                                 <div className="form-group focused">
                                     <label className="form-control-label" htmlFor="input-facebook">Facebook</label>
-                                    <input type="text" id="input-facebook" className="form-control form-control-alternative" placeholder="Enter Facebook ID" 
+                                    <input type="text" id="input-facebook" className="form-control form-control-alternative" placeholder="Enter Facebook profile link" 
                                         value={ profile.facebook || '' }   onChange={ e => setProfile({...profile, facebook: e.target.value }) }
                                     />
                                 </div>
@@ -341,8 +341,9 @@ function AddProfile(){
                         </div>
                     </div>
                     <br></br>
-                    <button className="btn btn-1 text-white" type="submit">Submit</button>
-                    <button className="btn btn-2 text-black" type="button" >Go back</button>
+                    <div className="text-center">
+                    <button className="btn cyan darken-3 btn-1 text-white w-75 mt-5 mb-5 font-weight-bold" type="submit">Update Profile</button>
+                    </div>
                 </form>
                 </div>
             </div>

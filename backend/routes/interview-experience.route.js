@@ -79,7 +79,7 @@ async (req, res) => {
 });
 
 //to update particular experience of the user
-router.post('/my/:id',[
+router.put('/my/:id',[
     auth, 
     [
         check('company', 'Company is required').not().isEmpty(),
@@ -97,7 +97,7 @@ async (req,res)=>{
         return res.status(400).json({ error: 'Please try loging in again' })
     }
     
-    const {company,role,questions,text} = req.body;
+    const { company, role, programmingTopics, csFundamentals, text } = req.body;
 
     const updateExp=Interviewexp.find({_id:req.params.id,userId:req.user.id});
     if(updateExp)
@@ -106,7 +106,8 @@ async (req,res)=>{
         .then(interviewExp =>{
             interviewExp.experience.company=company;
             interviewExp.experience.role=role;
-            interviewExp.experience.questions=questions;
+            interviewExp.experience.programmingTopics=programmingTopics;
+            interviewExp.experience.csFundamentals=csFundamentals;
             interviewExp.experience.text=text;
 
             interviewExp.save()

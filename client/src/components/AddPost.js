@@ -23,9 +23,14 @@ function AddPost(props){
             console.log(props.location)
             // fetchPost(props.location.postId)
             setFormData({ title: props.location.title, text: props.location.text })
+            localStorage.setItem('postId', props.location.postId)
+            localStorage.setItem('title', props.location.title)
+            localStorage.setItem('text', props.location.text)
+        } else if ( localStorage.getItem('title') ) {
+            setFormData({ title: localStorage.getItem('title'), text: localStorage.getItem('text') })
         }
 
-        // console.log(formData)
+        console.log(formData)
 
     }, [])
 
@@ -60,14 +65,28 @@ function AddPost(props){
 
             const body = { title, text }
 
-            const res = await axios.post('http://localhost:5000/post/add', body, config)
+            if(localStorage.getItem('postId')) {
 
-            setIsSubmited(true)
+                const id = localStorage.getItem('postId')
+                const res = await axios.put(`http://localhost:5000/post/my/${id}`, body, config)
 
-            toast.success('Post added successfully !', { 
-                position: toast.POSITION.TOP_CENTER,
-                autoClose: 2000
-            })
+                setIsSubmited(true)
+
+                toast.success('Post updated successfully !', { 
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 2000
+                })
+
+            } else {
+                const res = await axios.post('http://localhost:5000/post/add', body, config)
+
+                setIsSubmited(true)
+
+                toast.success('Post added successfully !', { 
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 2000
+                })
+            }
 
         } catch (error) {
 
@@ -78,6 +97,16 @@ function AddPost(props){
     }
 
     if(isSubmitted) {
+        if(localStorage.getItem('title')) {
+            localStorage.removeItem('title')
+        } 
+        if(localStorage.getItem('text')) {
+            localStorage.removeItem('text')
+        }
+        if(localStorage.getItem('postId')) {
+            localStorage.removeItem('postId')
+            return <Redirect to='/dashboard/myposts' />
+        }
         return <Redirect to='/dashboard' />
     }
 
@@ -88,7 +117,7 @@ function AddPost(props){
             <MDBRow>
                 <MDBCol md="12">
                     <MDBCard>
-                        <MDBCardHeader color="blue-grey lighten-1">
+                        <MDBCardHeader color="cyan darken-3">
                             <MDBCardTitle className="text-center text-white font-weight-bolder mt-2">Compose Your Post</MDBCardTitle>
                         </MDBCardHeader>
                         <MDBCardBody>
@@ -99,7 +128,7 @@ function AddPost(props){
                                         <div className="col-lg-12">
                                             <div className="form-group focused">
                                                 <input type="text" 
-                                                    value={formData.title || ''} 
+                                                    value={formData.title} 
                                                     onChange={e => setFormData({...formData, title: e.target.value})}
                                                     className="form-control form-control-alternative" 
                                                     placeholder="Enter the title" 
@@ -118,11 +147,14 @@ function AddPost(props){
                                                         const data = editor.getData();
                                                         setFormData({...formData, text: data})
                                                     } }
+                                                    onReady={ editor => {
+                                                        editor.setData(formData.text)
+                                                    }}
                                                 />
                                             </div>
                                         </div>
                                     </div>
-                                    <button className="btn blue-grey lighten-1 text-white font-weight-bold mt-3" type="submit">Submit <MDBIcon far icon="paper-plane" className="ml-2" /></button>
+                                    <div className="text-center"><button className="btn cyan darken-3 w-75 text-white font-weight-bold mt-5" type="submit">Add post<MDBIcon far icon="paper-plane" className="ml-2" /></button></div>
                                 </div>
                             </form>
                         </MDBCardBody>
