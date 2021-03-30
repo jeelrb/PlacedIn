@@ -21,9 +21,11 @@ function CommentBox(props) {
                         'auth-token': localStorage.getItem('token')
                     }
                 }
-
-                const res = await axios.get(`http://localhost:5000/post/${props.postId}`, config)
-
+                
+                let res
+                if(props.type.current==='post')res = await axios.get(`http://localhost:5000/post/${props.postId}`, config)
+                else res = await axios.get(`http://localhost:5000/interview/${props.postId}`, config)
+                
                 setComments(res.data.comments)
     
             } catch (error) {   
@@ -53,7 +55,9 @@ function CommentBox(props) {
 
             const body = { text: data }
 
-            const res = await axios.put(`http://localhost:5000/post/comment/${props.postId}`, body, config)
+            let res
+            if(props.type.current==='post')res = await axios.put(`http://localhost:5000/post/comment/${props.postId}`, body, config)
+            else res = await axios.put(`http://localhost:5000/interview/comment/${props.postId}`, body, config)
 
             setFormData('')
             setComments(res.data.comments)
@@ -81,8 +85,8 @@ function CommentBox(props) {
             </form>
             {
                 comments && 
-                comments.map((comment) => {
-                    return <CommentItem name={comment.name} text={comment.text} />
+                comments.map((comment, index) => {
+                    return <CommentItem name={comment.name} text={comment.text} key={index}/>
                 })
             }
 

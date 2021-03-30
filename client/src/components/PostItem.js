@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import CommentBox from './CommentBox'
 import parse from 'html-react-parser'
@@ -21,13 +21,14 @@ function PostItem(props) {
     const [ subjects, setSubjects ] = useState([])
     const [ text, setText ] = useState('')
     const [ onCommentClick, setOnCommentClick ] = useState(false)
+    const type = useRef('')
 
     const onClick = () => {
         setOnCommentClick(!onCommentClick)
     }
 
     useEffect(() => {
-        
+
         if(typeof props.data.title!=='undefined') {
             setTitle(props.data.title)
         }else{
@@ -38,20 +39,20 @@ function PostItem(props) {
             setQuestions(props.data.experience.programmingTopics)
             setSubjects(props.data.experience.csFundamentals)
             text = props.data.experience.text
+            type.current = 'interview'
         }else{
             text = props.data.text
+            type.current = 'post'
         }
         text = text.replace('oembed','iframe')
         text = text.replace('/oembed','/iframe')
         text = text.replace('url','src')
-        // console.log(text)
         setText(text)
 
     }, [] )
 
     const onDelete = async () =>{
         
-        // props.onFlag()
 
         try {
 
@@ -65,13 +66,10 @@ function PostItem(props) {
             let res1
             if(props.parent==='Interview Experience') {
                 res1 = await axios.delete(`http://localhost:5000/interview/my/${props.data._id}`, config)
-                // props.onFlag()
             } else if(props.parent==='Post') {
                 res1 = await axios.delete(`http://localhost:5000/post/my/${props.data._id}`, config)
-                // props.onFlag()
             }
             props.onFlag()
-            console.log(res1)
 
         } catch (error) {
 
@@ -88,8 +86,8 @@ function PostItem(props) {
                 <MDBCard className="mx-5">
                     <MDBCardHeader className=" light-blue darken-3">
                         <MDBRow>
-                            <MDBCol size="1" className="m-0"><Avatar src={props.data.profileId ? `/images/${props.data.profileId.avatar}` : ''} className="red">{props.data.userId.name[0]}</Avatar></MDBCol>
-                            <MDBCol size="11" className="text-left"><h5 className="text-white font-weight-bold m-0 mt-1">{props.data.userId.name}</h5><h6 className="m-0 mt-1 text-white">26-03-2021</h6></MDBCol>
+                            <MDBCol size="1" className="m-0"><Avatar src={props.data.userId ? `/images/${props.data.userId.avatar}` : ''} className="red">{props.data.userId.name[0]}</Avatar></MDBCol>
+                            <MDBCol size="11" className="text-left"><h5 className="text-white font-weight-bold m-0 mt-1">{props.data.userId.name}</h5><h6 className="m-0 mt-1 text-white">{Date(props.data.updatedAt).substring(0,16)}</h6></MDBCol>
                            
                         </MDBRow>
                     </MDBCardHeader>
@@ -119,7 +117,7 @@ function PostItem(props) {
                             {props.parent!=='posts' && <Tooltip className="edit mr-3" title={`Edit ${props.parent}`}><EditIcon style={{color:'#00838f'}}/></Tooltip> }
                         </Link>
                         {props.parent!=='posts' && <Tooltip className="edit" title={`Delete ${props.parent}`}><DeleteIcon onClick={e => props.onDelete(props.data._id)} style={{color:'#00838f'}}/></Tooltip> }
-                        { onCommentClick &&  <CommentBox postId={props.data._id}/>}
+                        { onCommentClick &&  <CommentBox postId={props.data._id} type={type} />}
                     </MDBCardFooter>
                 </MDBCard>
             </MDBCol>

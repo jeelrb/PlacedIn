@@ -48,7 +48,6 @@ function Post() {
 
     }
 
-    // console.log(suggestions)
 
   };
 
@@ -70,7 +69,7 @@ function Post() {
                 
                 let posts = res1.data
                 posts.unshift(...res2.data)
-                // console.log(posts)
+
                 posts.sort((post1, post2) => {
                     let x = new Date(post1.createdAt)
                     let y = new Date(post2.createdAt)
@@ -78,7 +77,7 @@ function Post() {
                     if(x>=y) return -1
                     return 0
                 })
-                // console.log(posts.data.profileId.avatar)
+
                 setPosts(posts)
                 setSuggestions(posts)
 
@@ -91,7 +90,6 @@ function Post() {
         }
 
         fetchPosts()
-        // console.log(posts.data.profileId.avatar)
 
     }, [])
 
@@ -109,7 +107,7 @@ function Post() {
             <Tab label="All"  />
             <Tab label="Posts" icon={<MDBIcon icon="pen"/>}/>
             <Tab label="Interview Experiences" icon={<MDBIcon icon="chalkboard-teacher"/>}/>
-            {/* <Tooltip title="Add Post"><AddIcon style={{fontSize: '40'}} onClick={e => setToggle(!toggle)} className="my-auto ml-5 add_post" /></Tooltip> */}
+  
             </Tabs>
             </Paper>
             { 1 && <MDBRow className="mt-5 mx-5 mb-5">
@@ -126,13 +124,7 @@ function Post() {
                 <Alert  className="mx-5 mt-5" severity="info">No posts</Alert>
 
             }
-            {/* <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem /> */}
+
         </MDBCol>
     )
 }

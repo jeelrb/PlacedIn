@@ -1,5 +1,6 @@
 const router=require('express').Router();
 const auth=require('../middleware/auth');
+const mongoose = require('mongoose')
 const Post=require('../models/Post');
 const User=require('../models/User');
 const Profile = require('../models/Profile')
@@ -9,7 +10,7 @@ const { check, validationResult } = require('express-validator');
 router.get('/', auth, async (req, res) => {
 
     try{
-        const posts = await Post.find().populate('profileId',['avatar']).populate('userId',['name'])
+        const posts = await Post.find().populate('userId',['name', 'avatar'])
         if(!posts){
             res.json({msg: 'No posts!!'});
         }
@@ -24,7 +25,7 @@ router.get('/', auth, async (req, res) => {
 //to show the users post
 router.get('/my', auth, async (req, res) => {
 
-    const post = await Post.find({userId: req.user.id}).populate('profileId', ['avatar']).populate('userId',['name'])
+    const post = await Post.find({userId: req.user.id}).populate('userId',['name', 'avatar'])
 
     if(!post) {
         res.json({msg: 'You have not added any post!!'});
@@ -37,7 +38,7 @@ router.get('/my', auth, async (req, res) => {
 //Post by id
 router.get('/:id', auth, async (req, res) => {
 
-    const post = await Post.findOne({ userId: req.user.id, _id: req.params.id })
+    const post = await Post.findOne({ _id: req.params.id })
     if(post) {
         res.json(post)
     } else {
@@ -69,10 +70,10 @@ async (req,res) => {
 
     const newPost = new Post({
         userId:req.user.id,
-        profileId: profile._id,
         text:text,
         title:title,
     });
+
     await newPost.save();
     res.json('Post Added');
 });
@@ -143,7 +144,7 @@ router.put('/comment/:id', auth, async (req, res) => {
 
 
     const user = await User.findById(req.user.id)
-    const post = await Post.findOne({ userId: req.user.id, _id: req.params.id })
+    const post = await Post.findOne({ _id: req.params.id })
 
     const newComment = {
         text: req.body.text,
@@ -160,11 +161,5 @@ router.put('/comment/:id', auth, async (req, res) => {
     res.json(post)
 })
 
-router.get('/comment/:id', auth, async (req, res) => {
-
-    const post = await Post.findOne({ userId: req.user.id, _id: req.params.id })
-    res.json(post.comments)
-
-})
 
 module.exports = router;

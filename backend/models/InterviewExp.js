@@ -19,10 +19,6 @@ const ExperienceSchema = mongoose.Schema({
             csFundamentals: [],
             text: String
         },
-        profileId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Profile'
-        },
         comments: [
             {
                 userId: {

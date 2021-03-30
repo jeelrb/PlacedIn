@@ -84,6 +84,10 @@ router.post('/', [ auth, upload.single('avatar'), [
             await Profile.findByIdAndDelete(profile._id)
         }
 
+        let user = await User.findById(req.user.id)
+        user.avatar = avatar
+        await user.save()
+
         profile = new Profile(profileFields)
         await profile.save()
         res.json(profile)
@@ -99,7 +103,7 @@ router.get('/me', auth, async (req, res) => {
 
     try {
 
-        const profile = await Profile.findOne({ userId: req.user.id }).populate('userId', ['name', 'username', 'email'])
+        const profile = await Profile.findOne({ userId: req.user.id }).populate('userId', ['name', 'username', 'email', 'avatar'])
         if(!profile) {
             return res.status(400).json({ msg: 'Profile not found' })
         }
@@ -117,7 +121,7 @@ router.get('/:id', auth, async (req, res) => {
 
     try {
 
-        const profile = await Profile.findOne({ userId: req.params.id }).populate('userId', ['name', 'username', 'email'])
+        const profile = await Profile.findOne({ userId: req.params.id }).populate('userId', ['name', 'username', 'email', 'avatar'])
         if(!profile) {
             return res.status(400).json({ msg: 'Profile not found' })
         }
@@ -135,7 +139,7 @@ router.get('/', auth, async (req, res) => {
 
     try {
 
-        const profiles = await Profile.find().populate('userId', [ 'name', 'email', 'username' ])
+        const profiles = await Profile.find().populate('userId', [ 'name', 'email', 'username', 'avatar' ])
         res.json(profiles)
 
     } catch (error){

@@ -15,7 +15,7 @@ const ColleagueProfile = (props) => {
                 <MDBCardHeader className=" teal lighten-2">
                 <MDBRow>
                             <MDBCol size="1" className="text-right"><Avatar src={props.details.avatar ? `/images/${props.details.avatar}` : ''} className="red">{props.details.name[0]}</Avatar></MDBCol>
-                            <MDBCol size="11" className="text-left"><h5 className="text-white font-weight-bold m-0 mt-1">{props.details.name}</h5><h6 className="m-0 mt-1 text-white">26-03-2021</h6></MDBCol>
+                            <MDBCol size="11" className="text-left"><h5 className="text-white font-weight-bold m-0 mt-1">{props.details.name}</h5></MDBCol>
                         </MDBRow>
                 </MDBCardHeader>
                 <MDBCardBody className="grey lighten-4">
@@ -97,6 +97,7 @@ function Colleague(){
                         const users = res.data.map((user) => {
                             return { instagram: user.instagram, twitter: user.twitter, facebook: user.facebook, linkedIn: user.linkedIn, avatar: user.avatar, company: user.company, name: user.userId.name, username: user.userId.username, userId: user.userId._id }
                         })
+                        
                         setProfiles(users)
                         setSuggestions(users)
                     })
@@ -146,13 +147,9 @@ function Colleague(){
         }
     }
 
-    const onReload = () => {
-        window.location.reload()
-    }
-
     return (
         <>
-            <Navbar onReload={onReload}/>
+            <Navbar />
             <MDBContainer>
                 <MDBRow className="mb-5">
                     <MDBCol md="12">
@@ -174,7 +171,7 @@ function Colleague(){
                     { suggestions.map((profile, index) => { 
                         return <ColleagueProfile key={index} details={{ 
                             name: profile.name || '',
-                            avatar: profile.avatar || '',
+                            avatar: profile.userId.avatar || '',
                             username: profile.username || '',
                             linkedIn: profile.linkedIn || '',
                             instagram: profile.instagram || '',

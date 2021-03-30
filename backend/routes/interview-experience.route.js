@@ -7,7 +7,8 @@ const { check, validationResult } = require('express-validator');
 
 //to show all the interview experiences
 router.get('/', auth, async (req, res)=>{
-    const interviewExp = await Interviewexp.find().populate('profileId', ['avatar']).populate('userId',['name'])
+
+    const interviewExp = await Interviewexp.find().populate('userId',['name', 'avatar'])
     if(!interviewExp){
         res.json({msg: 'Currently No Experiences are available'});
     }
@@ -19,7 +20,7 @@ router.get('/', auth, async (req, res)=>{
 //to show all experiences written by current user
 router.get('/my', auth, async (req,res) => {
 
-    const myInterviewExp = await Interviewexp.find({ userId: req.user.id }).populate('profileId', ['avatar']).populate('userId',['name'])
+    const myInterviewExp = await Interviewexp.find({ userId: req.user.id }).populate('userId',['name','avatar'])
     
     if(!myInterviewExp) {
         res.json({msg: 'You have not added any interview experience!!'});
@@ -28,6 +29,17 @@ router.get('/my', auth, async (req,res) => {
         res.json(myInterviewExp);
     }
 });
+
+router.get('/:id', auth, async (req, res) => {
+
+    const post = await Interviewexp.findOne({ _id: req.params.id })
+    if(post) {
+        res.json(post)
+    } else {
+        res.json({msg: 'Post does not exist'})
+    }
+
+})
 
 //to add new interview experiences
 router.post('/add',[
@@ -49,8 +61,6 @@ async (req, res) => {
         return res.status(400).json({ error: 'Please try loging in again' })
     }
 
-    let profile = await Profile.findOne({userId: req.user.id})
-
     const { company, role, programmingTopics, csFundamentals, text } = req.body;
 
     const newInterviewExp = new Interviewexp({
@@ -62,7 +72,6 @@ async (req, res) => {
             csFundamentals,
             text
         },
-        profileId: profile._id
     });
     
     await newInterviewExp.save();
@@ -123,6 +132,25 @@ router.delete('/my/:id', auth, async (req, res) => {
     }
 });
 
+router.put('/comment/:id', auth, async (req, res) => {
 
+
+    const user = await User.findById(req.user.id)
+    const post = await Interviewexp.findOne({ _id: req.params.id })
+
+    const newComment = {
+        text: req.body.text,
+        name: user.name,
+        userId: req.user.id
+    }
+
+    if(!post.comments)post.comments = []
+
+    post.comments.unshift(newComment)
+
+    await post.save()
+
+    res.json(post)
+})
 
 module.exports = router;
