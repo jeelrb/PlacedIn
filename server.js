@@ -7,9 +7,11 @@ const path = require('path')
 const app = express();
 
 // Connect with mongo database
+const uri = process.env.MONGODB_URL
+
 const connectDB = async () => {
     try {
-        await mongoose.connect(String(process.env.MONGODB_URL), {
+        await mongoose.connect(uri, {
             useNewUrlParser: true,
             useCreateIndex: true,
             useUnifiedTopology: true
