@@ -13,6 +13,7 @@ const connectDB = async () => {
             useUnifiedTopology: true
         })
         console.log('Mongo connected')
+        console.log(process.env.MONGODB_URL)
     } catch (err) {
         console.log(err.message)
         process.exit(1)
