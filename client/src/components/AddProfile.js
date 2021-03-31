@@ -61,7 +61,6 @@ function AddProfile(){
                 linkedIn, instagram, facebook, twitter, cfUserName, ccUserName, githubUserName, avatar } = userProfile.data
                 const { college, branch, batch, degree } = education[0]
                 
-                console.log(avatar)
                 //Skills is an array in database...so converting it to string to display in appropriate form
                 const res = skills.toString()
                 let userSkills=''
@@ -300,7 +299,7 @@ function AddProfile(){
                             </div>
                             <div className="col-lg-12">
                                 <div className="form-group focused">
-                                    <label className="form-control-label" htmlFor="input-website">Portfolio / Resume Link</label>
+                                    <label className="form-control-label" htmlFor="input-website">Resume Link</label>
                                     <input type="text" id="input-website" className="form-control form-control-alternative" placeholder="Enter link here" 
                                      value={ profile.portfolio || '' }   onChange={ e => setProfile({...profile, portfolio: e.target.value }) } />
                                 </div>

@@ -21,7 +21,6 @@ function AddPost(props){
 
         if(props.location.postId) {
             console.log(props.location)
-            // fetchPost(props.location.postId)
             setFormData({ title: props.location.title, text: props.location.text })
             localStorage.setItem('postId', props.location.postId)
             localStorage.setItem('title', props.location.title)
@@ -149,6 +148,9 @@ function AddPost(props){
                                                     } }
                                                     onReady={ editor => {
                                                         editor.setData(formData.text)
+                                                    }}
+                                                    config = {{
+                                                        removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed']
                                                     }}
                                                 />
                                             </div>

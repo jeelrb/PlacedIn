@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Navbar from './Navbar'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { MDBCard,MDBCardHeader, MDBCardBody, MDBCardTitle, MDBRow, MDBCol, MDBIcon, MDBContainer} from 'mdbreact';
+import { MDBCard,MDBCardHeader, MDBCardBody, MDBRow, MDBCol, MDBIcon, MDBContainer} from 'mdbreact';
 
 
 const ColleagueProfile = (props) => {
@@ -97,7 +97,7 @@ function Colleague(){
                         const users = res.data.map((user) => {
                             return { instagram: user.instagram, twitter: user.twitter, facebook: user.facebook, linkedIn: user.linkedIn, avatar: user.userId.avatar, company: user.company, name: user.userId.name, username: user.userId.username, userId: user.userId._id }
                         })
-                        console.log(users)
+                        
                         setProfiles(users)
                         setSuggestions(users)
                     })

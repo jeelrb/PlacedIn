@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
 import PostItem from './PostItem'
 import axios from 'axios'
-import AddIcon from '@material-ui/icons/AddBox';
 import Paper from '@material-ui/core/Paper';
-import { Alert, AlertTitle } from '@material-ui/lab';
-import Tooltip from '@material-ui/core/Tooltip';
+import { Alert } from '@material-ui/lab';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { MDBCol, MDBCard, MDBIcon, MDBBtn, MDBRow } from 'mdbreact';
@@ -16,7 +14,6 @@ function Post() {
 
     const [ posts, setPosts ] = useState([])
     const [ suggestions, setSuggestions ] = useState([])
-    const [ toggle, setToggle ] = useState(false)
     const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -54,6 +51,16 @@ function Post() {
 
     useEffect(() => {
 
+        if(localStorage.getItem('data')) {
+            localStorage.removeItem('data')
+        }
+        if(localStorage.getItem('title')){
+            localStorage.removeItem('title')
+        }
+        if(localStorage.getItem('text')){
+            localStorage.removeItem('text')
+        }
+
         const fetchPosts = async () => {
 
             try {
@@ -72,8 +79,8 @@ function Post() {
                 posts.unshift(...res2.data)
 
                 posts.sort((post1, post2) => {
-                    let x = new Date(post1.createdAt)
-                    let y = new Date(post2.createdAt)
+                    let x = new Date(post1.updatedAt)
+                    let y = new Date(post2.updatedAt)
                     if(x<y) return 1
                     if(x>=y) return -1
                     return 0

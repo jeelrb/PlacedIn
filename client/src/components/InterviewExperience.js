@@ -157,7 +157,7 @@ function InterviewExperience(props) {
             <MDBRow>
                 <MDBCol md="12">
                     <MDBCard>
-                        <MDBCardHeader className="blue-grey lighten-1">
+                        <MDBCardHeader className="cyan darken-3">
                             <MDBCardTitle className="text-center text-white font-weight-bolder mt-2">Interview Experience</MDBCardTitle>
                         </MDBCardHeader>
                         <MDBCardBody className="mr-2">
@@ -227,6 +227,9 @@ function InterviewExperience(props) {
                                                     } }
                                                     onReady={ editor => {
                                                         editor.setData(formData.text)
+                                                    }}
+                                                    config = {{
+                                                        removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed']
                                                     }}
                                                 />
                                             </div>

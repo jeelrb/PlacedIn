@@ -53,4 +53,37 @@ router.post('/', [
 
 })
 
+router.put('/forgot-password', [
+
+    check('password', 'Password is required').not().isEmpty(),
+    check('password', 'Password should be atleast 8 characters long').isLength({ min: 8 })
+
+] ,
+async (req, res) => {
+
+    const errors = validationResult(req)
+    if(!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }   
+
+    const { username, password } = req.body
+
+    let user = await User.findOne({ username })
+    console.log(user)
+
+    if(!user) {
+        return res.status(400).json({ errors: [{ msg: 'User does not exist with this username' }] })
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    const newPassword = await bcrypt.hash(password, salt)
+
+    user.password = newPassword
+
+    await user.save()
+
+    res.json(user)
+
+})
+
 module.exports = router

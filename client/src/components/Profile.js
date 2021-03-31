@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Avatar from '@material-ui/core/Avatar';
 import axios from 'axios'
 import Navbar from './Navbar';
+import Chip from '@material-ui/core/Chip';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { MDBContainer,MDBCol,MDBRow, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBIcon } from "mdbreact";
 
@@ -101,7 +102,7 @@ function Profile(props){
                     cfMaxRank = res1['data']['max rank']
                     cfProfile =  `https://codeforces.com/profile/${cfUserName}`
                 }
-                console.log(res2)
+                
                 if(typeof res2 !== 'undefined') {
                     ccRating = res2.data.rating
                     ccMaxRating =  res2.data.highest_rating
@@ -164,6 +165,11 @@ function Profile(props){
                                     </MDBCardBody>
                                 </MDBCol>
                             </MDBRow>
+                            { userData.portfolio && <MDBRow className="text-center mb-4">
+                                <MDBCol>
+                                     <a href={userData.portfolio} className="text-white"><Chip label='My Resume' color="secondary" className="mr-2 chips_logo"/></a>
+                                </MDBCol>
+                            </MDBRow> }
                             <MDBRow className="mb-4 text-center">
                                 <MDBCol className="text-center">
                                     {

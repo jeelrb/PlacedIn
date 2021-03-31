@@ -1,0 +1,4 @@
+{
+    "mongoURL": "mongodb+srv://placedin7787:placedin@7787@placedin.v5nxc.mongodb.net/test?retryWrites=true&w=majority",
+    "jwtSecret": "placedIn7787"
+}

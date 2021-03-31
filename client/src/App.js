@@ -8,8 +8,10 @@ import Profile from './components/Profile'
 import InterviewExperience from './components/InterviewExperience'
 import Colleagues from './components/Colleagues'
 import AddPost from './components/AddPost'
+import About from './components/About'
 import YourPosts from './components/YourPosts'
 import YourInterviewExperiences from './components/YouInterviewExperiences'
+import ForgotPassword from './components/ForgotPassword'
 import PrivateRoute from './components/routing/PrivateRoute'
 import {BrowserRouter as Router , Route, Switch} from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css'; 
@@ -29,7 +31,7 @@ function App() {
     setUser({
       token, isAuthenticated, isLoading
     })
-    console.log(isAuthenticated)
+    // console.log(isAuthenticated)
   }
 
   return (
@@ -37,6 +39,7 @@ function App() {
         <Switch>
           <Route path="/" exact render={() => <Login onAuthenticated={onAuthenticated}/>}></Route>
           <Route path="/signup" exact render={() => <Signup onAuthenticated={onAuthenticated}/>}></Route>
+          <Route path="/forgot-password" exact render={() => <ForgotPassword />}></Route>
           <PrivateRoute path="/dashboard" exact component={Dashboard}></PrivateRoute>
           <PrivateRoute path="/dashboard/profileSettings" exact component={AddProfile}></PrivateRoute>
           <PrivateRoute path="/dashboard/profiles" exact component={Colleagues}></PrivateRoute>
@@ -45,6 +48,7 @@ function App() {
           <PrivateRoute path="/dashboard/post" component={AddPost}></PrivateRoute>
           <PrivateRoute path="/dashboard/myposts" component={YourPosts}></PrivateRoute>
           <PrivateRoute path="/dashboard/myinterviewexperiences" component={YourInterviewExperiences}></PrivateRoute>
+          <PrivateRoute path="/dashboard/about" component={About}></PrivateRoute>
         </Switch>
     </Router>
   );

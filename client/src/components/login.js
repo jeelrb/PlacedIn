@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import DisplayError from './DisplayError'
 import axios from 'axios'
 
@@ -23,7 +23,7 @@ function Login({ onAuthenticated }) {
 
         e.preventDefault()
         
-        console.log(data)
+        // console.log(data)
 
         const config = {
             headers: {
@@ -36,7 +36,7 @@ function Login({ onAuthenticated }) {
         try {
 
             const res = await axios.post('http://localhost:5000/', body, config)
-            console.log(res)
+            // console.log(res)
             localStorage.setItem('token',res.data.token)
             setIsAuthenticated(true)
             setIsLoading(false)
@@ -73,7 +73,7 @@ function Login({ onAuthenticated }) {
     }
 
     return (
-        <div className="form">
+        <div className="form mt-5">
             <ul className="tab-group">
                 <li className="tab active"><a href="/">Log In</a></li>
                 <li className="tab"><a href="/signup">Sign Up</a></li>
@@ -107,7 +107,7 @@ function Login({ onAuthenticated }) {
                                 Password<span className="req">*</span>
                             </label>
                         </div>
-                        <p className="forgot"><a href="#">Forgot Password?</a></p>
+                        <p className="forgot"><Link to='/forgot-password'>Forgot Password?</Link></p>
                         <button type="submit" className="button button-block">Log In</button>                
                     </form>
                 </div>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import CommentItem from './CommentItem'
-import AddIcon from '@material-ui/icons/AddCircleOutlined';
-import { MDBCard,MDBCardHeader, MDBCardBody, MDBCardTitle, MDBBtn, MDBRow, MDBCol, MDBIcon, MDBContainer, MDBCardFooter} from 'mdbreact';
 
 function CommentBox(props) {
 

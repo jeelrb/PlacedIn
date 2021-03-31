@@ -10,6 +10,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddComment from '@material-ui/icons/AddCommentRounded';
 import Like from '@material-ui/icons/ThumbUpAltOutlined';
+import Liked from '@material-ui/icons/ThumbUpAlt';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { MDBCard,MDBCardHeader, MDBCardBody, MDBCardTitle, MDBBtn, MDBRow, MDBCol, MDBIcon, MDBContainer, MDBCardFooter} from 'mdbreact';
@@ -20,6 +21,7 @@ function PostItem(props) {
     const [ questions, setQuestions ] = useState([])
     const [ subjects, setSubjects ] = useState([])
     const [ text, setText ] = useState('')
+    const [ likeToggle, setLikeToggle ] = useState(false)
     const [ onCommentClick, setOnCommentClick ] = useState(false)
     const type = useRef('')
 
@@ -28,7 +30,7 @@ function PostItem(props) {
     }
 
     useEffect(() => {
-
+        // console.log(props.data)
         if(typeof props.data.title!=='undefined') {
             setTitle(props.data.title)
         }else{
@@ -53,7 +55,6 @@ function PostItem(props) {
 
     const onDelete = async () =>{
         
-
         try {
 
             const config = {
@@ -77,6 +78,37 @@ function PostItem(props) {
 
         }
         
+    }
+
+    const onLikeTogggle = async () => {
+
+        setLikeToggle(!likeToggle)
+
+        try {
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'auth-token': localStorage.getItem('token')
+                }
+            }
+            
+            let res
+
+            if(props.data.experience) {
+                res = await axios.put(`http://localhost:5000/interview/like/${props.data._id}`, {}, config)
+            } else  {
+                res = await axios.put(`http://localhost:5000/post/like/${props.data._id}`, {}, config)
+            }
+
+            console.log(res)
+
+        } catch (error) {
+
+            console.log(error.response)
+
+        }
+        
 
     }
 
@@ -86,13 +118,13 @@ function PostItem(props) {
                 <MDBCard className="mx-5">
                     <MDBCardHeader className=" light-blue darken-3">
                         <MDBRow>
-                            <MDBCol size="1" className="m-0"><Avatar src={props.data.userId ? `/images/${props.data.userId.avatar}` : ''} className="red">{props.data.userId.name[0]}</Avatar></MDBCol>
-                            <MDBCol size="11" className="text-left"><h5 className="text-white font-weight-bold m-0 mt-1">{props.data.userId.name}</h5><h6 className="m-0 mt-1 text-white">{Date(props.data.updatedAt).substring(0,16)}</h6></MDBCol>
-                           
+                            <MDBCol size="1" className="m-0 text-right"><Avatar src={props.data.userId ? `/images/${props.data.userId.avatar}` : ''} className="red">{props.data.userId.name[0]}</Avatar></MDBCol>
+                            <MDBCol size="11" className="text-left"><h5 className="text-white font-weight-bold m-0 mt-1">{props.data.userId.name}</h5><h6 className="m-0 mt-1 text-white">{(props.data.updatedAt).substring(0,10)}</h6></MDBCol>
                         </MDBRow>
                     </MDBCardHeader>
                     <MDBCardBody className="white">
                     <h5 style={{color: '#bf360c'}} className="mb-4 font-weight-bolder">{title}</h5>
+                    <h6 className="text-primary font-weight-bold">{props.data.experience &&  `For - ${props.data.experience.role}` }</h6>
                         <MDBRow className="text-center">
                             <MDBCol>
                                 { questions.length!==0 && <hr className="hr-text-form" data-content="Programming Questions asked"></hr> }
@@ -105,13 +137,15 @@ function PostItem(props) {
                                 }) }
                             </MDBCol>
                         </MDBRow>
-                        { text &&  <hr className="hr-text-form mb-5 mt-5" data-content=""></hr> }
+                        { text &&  <MDBCard className="mt-5"><MDBCardBody>{ parse(text) }</MDBCardBody></MDBCard> }
                         {/* <div dangerouslySetInnerHTML={{ __html: text }}></div> */}
-                        {/* { parse(text) } */}
+                        
+                        
                         {/* <Chip label="DP"  color="default"/><Chip label="Binary Search"  color="secondary"/> */}
                     </MDBCardBody>
                     <MDBCardFooter className="grey lighten-3 mt-5"> 
-                        <Tooltip className="edit" title="Like"><Like className="mr-3 likeNComment" style={{color:'#00838f'}}/></Tooltip>
+                        { !likeToggle && <Tooltip className="edit" title="Like"><Like className="mr-3 likeNComment"  onClick={onLikeTogggle} style={{color:'#00838f'}}/></Tooltip>}
+                        { likeToggle && <Tooltip className="edit" title="Unlike"><Liked className="mr-3 likeNComment"  onClick={onLikeTogggle} style={{color:'#00838f'}}/></Tooltip>}
                         <Tooltip className="edit" title="Comment"><AddComment  className="likeNComment mr-3" onClick={onClick} style={{color:'#00838f'}} /></Tooltip>
                         { props.parent==='Post' ? <Link to={{ pathname: '/dashboard/post', postId: props.data._id, title: props.data.title, text: props.data.text }}>
                             {props.parent!=='posts' && <Tooltip className="edit mr-3" title={`Edit ${props.parent}`}><EditIcon style={{color:'#00838f'}}/></Tooltip> }

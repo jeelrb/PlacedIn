@@ -13,7 +13,7 @@ router.post('/', [
     check('email', 'Email is required').not().isEmpty(),
     check('email', 'Enter a valid email').isEmail(),
     check('password', 'Password is required').not().isEmpty(),
-    check('password', 'Enter password within given constraints').isLength({ min: 8 })
+    check('password', 'EPassword should be atleast 8 characters long').isLength({ min: 8 })
 
 ] , async (req, res) => {
 

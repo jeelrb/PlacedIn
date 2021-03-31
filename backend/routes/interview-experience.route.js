@@ -154,4 +154,29 @@ router.put('/comment/:id', auth, async (req, res) => {
     res.json(post)
 })
 
+router.put('/like/:id', auth, async ( req, res ) => {
+    
+    const post = await Interviewexp.findOne({ _id: req.params.id })
+  
+    if(post.likes.filter(like => like.userId.toString()===req.user.id).length>=1) {
+
+        const removeIndex = post.likes.map((like) => like.userId.toString()).indexOf(req.user.id)
+
+        post.likes.splice(removeIndex, 1)
+
+        await post.save()
+
+        res.json(post)
+
+    } else {
+        post.likes.unshift({ userId: req.user.id })
+
+        await post.save()
+
+        res.json(post)
+    }
+
+})
+
+
 module.exports = router;

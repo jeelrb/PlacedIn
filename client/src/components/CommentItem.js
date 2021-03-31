@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { MDBCard,MDBCardHeader, MDBCardBody, MDBCardTitle, MDBBtn, MDBRow, MDBCol, MDBIcon, MDBContainer, MDBCardFooter} from 'mdbreact';
+import React from 'react'
+import { MDBCard, MDBCardBody,  MDBRow, MDBCol } from 'mdbreact';
 
 function CommentItem(props) {
     

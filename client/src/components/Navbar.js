@@ -38,6 +38,9 @@ function Navbar(props) {
                     <MDBNavItem active={window.location.pathname==='/dashboard/myinterviewexperiences'}>
                     <MDBNavLink className="navbar_item" to="/dashboard/myinterviewexperiences" >My Interview Experiences</MDBNavLink>
                     </MDBNavItem>
+                    <MDBNavItem active={window.location.pathname==='/dashboard/about'}>
+                    <MDBNavLink className="navbar_item" to="/dashboard/about" >About</MDBNavLink>
+                    </MDBNavItem>
                 </MDBNavbarNav>
                 <MDBNavbarNav right className="pr-5">
                     <MDBNavItem>

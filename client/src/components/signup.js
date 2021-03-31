@@ -36,7 +36,7 @@ function Signup({ onAuthenticated }) {
             try {
 
                 const res = await axios.post('http://localhost:5000/register', body, config)
-                console.log(res)
+                
                 localStorage.setItem('token',res.data.token)
                 setIsAuthenticated(true)
                 setIsLoading(false)
@@ -61,7 +61,7 @@ function Signup({ onAuthenticated }) {
     }
 
     return (
-        <div className="form">
+        <div className="form mt-5">
             <ul className="tab-group">
                 <li className="tab"><a href="/">Log In</a></li>
                 <li className="tab active"><a href="/signup">Sign Up</a></li>
@@ -78,10 +78,10 @@ function Signup({ onAuthenticated }) {
                                     value={name}
                                     onChange={(e) => setData({ ...data, name: e.target.value })}
                                     required 
-                                    autocomplete="off" 
+                                    autoComplete="off" 
                                 />
                                 <label>
-                                    Name<span class="req">*</span>
+                                    Name<span className="req">*</span>
                                 </label>
                             </div>
                             <div className="field-wrap">
@@ -90,7 +90,7 @@ function Signup({ onAuthenticated }) {
                                     value={username}
                                     onChange={(e) => setData({ ...data, username: e.target.value })}
                                     required 
-                                    autocomplete="off"    
+                                    autoComplete="off"    
                                 />
                                 <label>
                                     User Name<span className="req">*</span>
@@ -103,7 +103,7 @@ function Signup({ onAuthenticated }) {
                                 value={email}
                                 onChange={(e) => setData({ ...data, email: e.target.value })}
                                 required 
-                                autocomplete="off"
+                                autoComplete="off"
                             />
                             <label>
                                 Email Address<span className="req">*</span>
@@ -116,7 +116,7 @@ function Signup({ onAuthenticated }) {
                                 value={password1}
                                 onChange={(e) => setData({ ...data, password1: e.target.value })}
                                 required 
-                                autocomplete="off"
+                                autoComplete="off"
                             />
                             <label>
                                 Enter Password<span className="req">*</span>
@@ -129,7 +129,7 @@ function Signup({ onAuthenticated }) {
                                 value={password2}
                                 onChange={(e) => setData({ ...data, password2: e.target.value })}
                                 required 
-                                autocomplete="off"
+                                autoComplete="off"
                             />
                             <label>
                                 Confirm Password<span className="req">*</span>

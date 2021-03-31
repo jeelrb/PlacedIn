@@ -29,8 +29,8 @@ function YouInterviewExperiences() {
                 let posts = res1.data
                
                 posts.sort((post1, post2) => {
-                    let x = new Date(post1.createdAt)
-                    let y = new Date(post2.createdAt)
+                    let x = new Date(post1.updatedAt)
+                    let y = new Date(post2.updatedAt)
                     if(x<y) return 1
                     if(x>=y) return -1
                     return 0
