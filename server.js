@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('../config/db')
+const connectDB = require('./config/db')
 const path = require('path')
 
 const app = express();
@@ -15,11 +15,11 @@ app.use(cors())
 app.use(express.json());
 
 //Routes setup
-const postRouter = require('./routes/doubt.route');
-const interviewExpRouter = require('./routes/interview-experience.route');
-const profileRouter = require('./routes/profile');
-const registrationRouter = require('./routes/register')
-const loginRouter = require('./routes/login')
+const postRouter = require('./backend/routes/doubt.route');
+const interviewExpRouter = require('./backend/routes/interview-experience.route');
+const profileRouter = require('./backend/routes/profile');
+const registrationRouter = require('./backend/routes/register')
+const loginRouter = require('./backend/routes/login')
 
 app.use('/register',registrationRouter)
 app.use('/profile',profileRouter);
