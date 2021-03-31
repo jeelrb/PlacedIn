@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "main": "backend/server.js",
+  "engines": {
+    "node": "12.x"
+  },
   "dependencies": {
     "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
