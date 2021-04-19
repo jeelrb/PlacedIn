@@ -67,7 +67,7 @@ function AddPost(props){
             if(localStorage.getItem('postId')) {
 
                 const id = localStorage.getItem('postId')
-                const res = await axios.put(`http://localhost:5000/post/my/${id}`, body, config)
+                const res = await axios.put(`/post/my/${id}`, body, config)
 
                 setIsSubmited(true)
 
@@ -77,7 +77,7 @@ function AddPost(props){
                 })
 
             } else {
-                const res = await axios.post('http://localhost:5000/post/add', body, config)
+                const res = await axios.post('/post/add', body, config)
 
                 setIsSubmited(true)
 

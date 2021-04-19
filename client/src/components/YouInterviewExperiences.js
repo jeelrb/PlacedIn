@@ -24,7 +24,7 @@ function YouInterviewExperiences() {
                     }
                 }
 
-                const res1 = await axios.get('http://localhost:5000/interview/my', config)
+                const res1 = await axios.get('/interview/my', config)
                 
                 let posts = res1.data
                
@@ -74,7 +74,7 @@ function YouInterviewExperiences() {
                 }
             }
             
-            const res1 = await axios.delete(`http://localhost:5000/interview/my/${post_id}`, config)
+            const res1 = await axios.delete(`/interview/my/${post_id}`, config)
             
 
         } catch (error) {

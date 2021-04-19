@@ -21,8 +21,8 @@ function CommentBox(props) {
                 }
                 
                 let res
-                if(props.type.current==='post')res = await axios.get(`http://localhost:5000/post/${props.postId}`, config)
-                else res = await axios.get(`http://localhost:5000/interview/${props.postId}`, config)
+                if(props.type.current==='post')res = await axios.get(`/post/${props.postId}`, config)
+                else res = await axios.get(`/interview/${props.postId}`, config)
                 
                 setComments(res.data.comments)
     
@@ -54,8 +54,8 @@ function CommentBox(props) {
             const body = { text: data }
 
             let res
-            if(props.type.current==='post')res = await axios.put(`http://localhost:5000/post/comment/${props.postId}`, body, config)
-            else res = await axios.put(`http://localhost:5000/interview/comment/${props.postId}`, body, config)
+            if(props.type.current==='post')res = await axios.put(`/post/comment/${props.postId}`, body, config)
+            else res = await axios.put(`/interview/comment/${props.postId}`, body, config)
 
             setFormData('')
             setComments(res.data.comments)

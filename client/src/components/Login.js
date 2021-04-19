@@ -35,7 +35,7 @@ function Login({ onAuthenticated }) {
 
         try {
 
-            const res = await axios.post('http://localhost:5000/', body, config)
+            const res = await axios.post('/', body, config)
             // console.log(res)
             localStorage.setItem('token',res.data.token)
             setIsAuthenticated(true)

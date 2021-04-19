@@ -25,7 +25,7 @@ function YourPosts() {
                     }
                 }
 
-                const res1 = await axios.get('http://localhost:5000/post/my', config)
+                const res1 = await axios.get('/post/my', config)
                 
                 let posts = res1.data
 
@@ -76,7 +76,7 @@ function YourPosts() {
                 }
             }
             
-            const res1 = await axios.delete(`http://localhost:5000/post/my/${post_id}`, config)
+            const res1 = await axios.delete(`/post/my/${post_id}`, config)
             
 
         } catch (error) {

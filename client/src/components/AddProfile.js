@@ -54,7 +54,7 @@ function AddProfile(){
                 }
 
                 //Sending get request to mentioned route
-                const userProfile = await axios.get('http://localhost:5000/profile/me', config)
+                const userProfile = await axios.get('/profile/me', config)
                 
                 //Destructuring the object returned from the get request
                 const { education, skills, company, portfolio,
@@ -162,8 +162,8 @@ function AddProfile(){
 
             
             //Sending post requests to our REST api to store / update user profile
-            res1 = await axios.post('http://localhost:5000/profile', formData, config)
-            res5 = await axios.put('http://localhost:5000/profile/education', eduInfo, config)
+            res1 = await axios.post('/profile', formData, config)
+            res5 = await axios.put('/profile/education', eduInfo, config)
 
             //If no error occured then change isSubmit to true
             setIsSubmited(true)

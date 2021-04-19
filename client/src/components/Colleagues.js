@@ -92,7 +92,7 @@ function Colleague(){
                     }
                 }
 
-                axios.get('http://localhost:5000/profile', config)
+                axios.get('/profile', config)
                     .then((res) => {
                         const users = res.data.map((user) => {
                             return { instagram: user.instagram, twitter: user.twitter, facebook: user.facebook, linkedIn: user.linkedIn, avatar: user.userId.avatar, company: user.company, name: user.userId.name, username: user.userId.username, userId: user.userId._id }

@@ -24,7 +24,7 @@ function UserProfile() {
                     }
                 }
 
-                const res = await axios.get(`http://localhost:5000/profile/me`, config)
+                const res = await axios.get(`/profile/me`, config)
     
                 setMyProfile(res)
                 setIsProfile(true)

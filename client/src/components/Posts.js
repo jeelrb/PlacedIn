@@ -72,8 +72,8 @@ function Post() {
                     }
                 }
 
-                const res1 = await axios.get('http://localhost:5000/interview', config)
-                const res2 = await axios.get('http://localhost:5000/post', config)
+                const res1 = await axios.get('/interview', config)
+                const res2 = await axios.get('/post', config)
                 
                 let posts = res1.data
                 posts.unshift(...res2.data)

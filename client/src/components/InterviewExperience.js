@@ -111,7 +111,7 @@ function InterviewExperience(props) {
                 const id = JSON.parse(localStorage.getItem("data"))._id
                 console.log('Hi')
 
-                const res = await axios.put(`http://localhost:5000/interview/my/${id}`, body, config)
+                const res = await axios.put(`/interview/my/${id}`, body, config)
 
                 setIsSubmited(true)
 
@@ -122,7 +122,7 @@ function InterviewExperience(props) {
 
             } else {
 
-                const res = await axios.post('http://localhost:5000/interview/add', body, config)
+                const res = await axios.post('/interview/add', body, config)
 
                 setIsSubmited(true)
 

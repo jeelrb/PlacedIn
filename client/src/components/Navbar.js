@@ -44,18 +44,6 @@ function Navbar(props) {
                 </MDBNavbarNav>
                 <MDBNavbarNav right className="pr-5">
                     <MDBNavItem>
-                        {/* <MDBDropdown dropleft>
-                            <MDBDropdownToggle nav caret>
-                            <MDBIcon icon="user" />
-                            </MDBDropdownToggle>
-                            <MDBDropdownMenu className="dropdown-default">
-                                <MDBDropdownItem href="/dashboard/profileSettings">Add profile</MDBDropdownItem>
-                                <MDBDropdownItem href="/dashboard/profileSettings">Edit profile</MDBDropdownItem>
-                                <MDBDropdownItem href="#!">Your Posts</MDBDropdownItem>
-                                <MDBDropdownItem divider/>
-                                <MDBDropdownItem href='/'>Logout</MDBDropdownItem>
-                            </MDBDropdownMenu>
-                        </MDBDropdown> */}
                         
                         <Tooltip title="logout"><a href="/"><MDBIcon icon="sign-out-alt" className="text-white" size="2x"/></a></Tooltip>
                     </MDBNavItem>

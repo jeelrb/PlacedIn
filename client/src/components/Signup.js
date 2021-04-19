@@ -35,7 +35,7 @@ function Signup({ onAuthenticated }) {
 
             try {
 
-                const res = await axios.post('http://localhost:5000/register', body, config)
+                const res = await axios.post('/register', body, config)
                 
                 localStorage.setItem('token',res.data.token)
                 setIsAuthenticated(true)

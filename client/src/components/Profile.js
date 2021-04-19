@@ -60,7 +60,7 @@ function Profile(props){
                     }
                 }
 
-                const res = await axios.get(`http://localhost:5000/profile/${userId}`, config)
+                const res = await axios.get(`/profile/${userId}`, config)
                 
                 const { cfUserName, ccUserName, githubUserName, education, skills, company, portfolio,
                 linkedIn, instagram, facebook, twitter, avatar } = res.data

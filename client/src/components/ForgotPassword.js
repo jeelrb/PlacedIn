@@ -50,7 +50,7 @@ function ForgotPassword() {
 
             const body = { username: formData.username, password: formData.password1 }
 
-            const res = await axios.put('http://localhost:5000/forgot-password', body, config)
+            const res = await axios.put('/forgot-password', body, config)
 
             setIsSubmitted(true)
 

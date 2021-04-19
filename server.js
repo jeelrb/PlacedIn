@@ -3,21 +3,18 @@ const config = require('config')
 const mongoose = require('mongoose')
 const cors = require('cors');
 const path = require('path')
+const mongodb = config.get('mongoURL')
 
 const app = express();
 
-// Connect with mongo database
-const uri = process.env.MONGODB_URL
-
 const connectDB = async () => {
     try {
-        await mongoose.connect(uri, {
+        await mongoose.connect(process.env.MONGO_URL || mongodb, {
             useNewUrlParser: true,
             useCreateIndex: true,
             useUnifiedTopology: true
         })
         console.log('Mongo connected')
-        console.log(process.env.MONGODB_URL)
     } catch (err) {
         console.log(err.message)
         process.exit(1)

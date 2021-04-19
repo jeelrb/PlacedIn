@@ -66,9 +66,9 @@ function PostItem(props) {
             
             let res1
             if(props.parent==='Interview Experience') {
-                res1 = await axios.delete(`http://localhost:5000/interview/my/${props.data._id}`, config)
+                res1 = await axios.delete(`/interview/my/${props.data._id}`, config)
             } else if(props.parent==='Post') {
-                res1 = await axios.delete(`http://localhost:5000/post/my/${props.data._id}`, config)
+                res1 = await axios.delete(`/post/my/${props.data._id}`, config)
             }
             props.onFlag()
 
@@ -96,9 +96,9 @@ function PostItem(props) {
             let res
 
             if(props.data.experience) {
-                res = await axios.put(`http://localhost:5000/interview/like/${props.data._id}`, {}, config)
+                res = await axios.put(`/interview/like/${props.data._id}`, {}, config)
             } else  {
-                res = await axios.put(`http://localhost:5000/post/like/${props.data._id}`, {}, config)
+                res = await axios.put(`/post/like/${props.data._id}`, {}, config)
             }
 
             console.log(res)
